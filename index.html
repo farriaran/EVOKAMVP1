@@ -761,7 +761,23 @@
     app.toggleRecording = function() {
       alert("MVP: grabación aún no implementada.");
     };
-  <script>
+  app.toggleRecording = function() {
+  alert("MVP: grabación aún no implementada.");
+};
+
+// ✅ Reset diario de tokens
+(function resetDailyTokens() {
+  const today = new Date().toISOString().split('T')[0];
+  const last = localStorage.getItem('evokaLastTokenReset');
+
+  if (last !== today) {
+    dailyTokens = 1;
+    localStorage.setItem('evokaTokens', String(dailyTokens));
+    localStorage.setItem('evokaLastTokenReset', today);
+  }
+})();
+</script>
+<script>
 /* =========================
    ✅ MOTOR MVP: Guardado de memorias (Públicas / Privadas para Albaceas)
    Pegar al FINAL del script existente, antes de </script>
@@ -964,6 +980,7 @@
 </script>
 </body>
 </html>
+
 
 
 
