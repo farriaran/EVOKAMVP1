@@ -2,839 +2,768 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EVOKA — Tu Legado Digital</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>EVOKA - Tu Legado Digital</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    :root{
-      --bg:#0f1011;
-      --panel:#17181a;
-      --panel2:#1e1f22;
-      --stroke: rgba(255,255,255,.08);
-      --glow: rgba(34,211,238,.20);
-    }
-    html,body{ height:100%; }
-    body{ font-family:'Nunito',sans-serif; background: var(--bg); }
-    .fade-in{ animation:fade .25s ease-out; }
-    @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:translateY(0)} }
+    body { font-family: 'Nunito', sans-serif; }
 
-    /* Sidebar */
-    #rail{
-      width: 88px;
-      transition: width .22s ease;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border-right: 1px solid var(--stroke);
-    }
-    #rail:hover{ width: 240px; }
-    #rail .label{
-      max-width: 0;
+    .fade-in { animation: fadeIn .35s ease-in-out; }
+    @keyframes fadeIn { from {opacity:0} to {opacity:1} }
+
+    /* Nav rail: no “empuja” el layout, solo se expande dentro de su propio espacio */
+    #nav-rail { width: 5rem; }
+    #nav-rail:hover { width: 16rem; }
+    #nav-rail { transition: width .25s ease; }
+
+    #nav-rail .nav-text {
       opacity: 0;
       transform: translateX(-6px);
-      transition: all .18s ease;
+      max-width: 0;
       overflow: hidden;
       white-space: nowrap;
+      transition: opacity .2s ease, transform .2s ease, max-width .25s ease;
     }
-    #rail:hover .label{
-      max-width: 160px;
+    #nav-rail:hover .nav-text {
       opacity: 1;
       transform: translateX(0);
+      max-width: 12rem;
     }
 
-    .icon-btn{
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      transition: transform .12s ease, background .12s ease;
-    }
-    .icon-btn:hover{ background: rgba(255,255,255,.06); transform: translateY(-1px); }
-    .icon-btn.active{ border-color: rgba(34,211,238,.45); box-shadow: 0 0 0 4px var(--glow); }
-
-    /* Main container */
-    #appShell{
-      background:
-        radial-gradient(900px 500px at 40% 15%, rgba(34,211,238,.10), transparent 60%),
-        radial-gradient(700px 500px at 80% 20%, rgba(59,130,246,.08), transparent 55%);
-    }
-
-    /* Floating composer */
-    .composer{
-      background: rgba(23,24,26,.88);
-      border: 1px solid var(--stroke);
-      box-shadow: 0 30px 80px rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-    }
-    .inputbox{
-      background: rgba(255,255,255,.03);
-      border: 1px solid var(--stroke);
-    }
-    .pill{
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-    }
-
-    /* Toast */
-    #toast{
-      background: rgba(16,185,129,.92);
-      box-shadow: 0 20px 60px rgba(0,0,0,.45);
-      backdrop-filter: blur(6px);
-    }
+    /* Scrollbar suave (opcional) */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.08); border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.14); }
   </style>
 </head>
 
-<body class="text-gray-200">
-  <div class="flex h-screen w-full overflow-hidden">
+<body class="bg-[#131314] text-gray-200 antialiased flex min-h-screen overflow-hidden">
 
-    <!-- Sidebar -->
-    <aside id="rail" class="h-screen px-3 py-4 flex flex-col gap-4">
-      <!-- Logo -->
-      <div class="flex items-center gap-3 px-2 py-2">
-        <div class="text-cyan-300 font-extrabold tracking-tight text-xl">EVOKA</div>
-        <div class="label text-xs text-gray-400">MVP</div>
+  <!-- NAV -->
+  <aside id="nav-rail" class="bg-[#1e1f20] h-screen p-4 flex flex-col items-center space-y-6 shrink-0">
+    <div class="w-16 mb-2 select-none">
+      <svg viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg" aria-label="EVOKA logo">
+        <defs>
+          <linearGradient id="gradIso1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <text x="50%" y="50%" dy=".3em" text-anchor="middle"
+              font-family="Nunito, sans-serif" font-size="50" font-weight="800"
+              fill="url(#gradIso1)" letter-spacing="-2">
+          EV<tspan fill="#67e8f9">O</tspan>KA
+        </text>
+        <path d="M 68 40 L 182 40" stroke="url(#gradIso1)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <nav id="side-nav" class="flex flex-col space-y-2 w-full">
+      <!-- links dinámicos -->
+    </nav>
+  </aside>
+
+  <!-- APP -->
+  <div class="flex-1 flex flex-col h-screen overflow-hidden">
+    <!-- Header -->
+    <header class="flex justify-end items-center py-4 px-6">
+      <div class="relative">
+        <button id="profile-button"
+                class="flex items-center gap-3 bg-gray-800/50 p-1 pr-3 rounded-full transition hover:bg-gray-700 border border-white/5"
+                onclick="window.app.toggleProfileMenu()">
+          <div class="w-9 h-9 bg-gray-700 rounded-full flex items-center justify-center font-extrabold text-cyan-300 border-2 border-cyan-500">
+            F
+          </div>
+
+          <div class="flex flex-col items-start leading-tight">
+            <span id="user-status" class="text-xs font-extrabold text-cyan-400">FREE</span>
+            <div class="flex items-center gap-2 text-xs text-gray-300">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2l3.331 2.21a1 1 0 01.293 1.744l-2.653 1.72 1.433 3.428a1 1 0 01-1.617 1.057L12 15.583l-2.933 2.764a1 1 0 01-1.617-1.057l1.433-3.428-2.653-1.72a1 1 0 01.293-1.744L9.854 7.2l1.179-4.456A1 1 0 0112 2z" clip-rule="evenodd"></path>
+              </svg>
+              <span id="token-count">1</span>
+            </div>
+          </div>
+        </button>
+
+        <div id="profile-menu"
+             class="hidden absolute right-0 mt-2 w-56 origin-top-right bg-[#2c2d2f] rounded-xl shadow-lg ring-1 ring-black ring-opacity-40 z-50 overflow-hidden">
+          <div class="py-1">
+            <a href="#" onclick="window.app.navigateTo('profile')"
+               class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700">Perfil</a>
+            <a href="#" onclick="window.app.navigateTo('settings')"
+               class="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-700">Configuración</a>
+            <div class="border-t border-white/10 my-1"></div>
+            <a href="#" onclick="window.app.navigateTo('plans')"
+               class="block px-4 py-2 text-sm font-bold text-cyan-300 hover:bg-gray-700">Mejora tu experiencia</a>
+          </div>
+        </div>
       </div>
-
-      <!-- Nav -->
-      <nav class="flex-1 flex flex-col gap-3 mt-2">
-        <a href="#" data-page="home" class="navlink flex items-center gap-3 px-2 py-2 rounded-xl">
-          <div class="icon-btn w-12 h-12 rounded-2xl flex items-center justify-center">
-            <!-- home -->
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M3 12l9-9 9 9M4 10v10a1 1 0 001 1h4m10-12v12a1 1 0 01-1 1h-4m-6 0v-7a1 1 0 011-1h2a1 1 0 011 1v7" />
-            </svg>
-          </div>
-          <div class="label text-sm text-gray-200">Inicio</div>
-        </a>
-
-        <a href="#" data-page="dialogue" class="navlink flex items-center gap-3 px-2 py-2 rounded-xl">
-          <div class="icon-btn w-12 h-12 rounded-2xl flex items-center justify-center">
-            <!-- chat -->
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-          </div>
-          <div class="label text-sm text-gray-200">Entrenamiento IA</div>
-        </a>
-
-        <a href="#" data-page="memories" class="navlink flex items-center gap-3 px-2 py-2 rounded-xl">
-          <div class="icon-btn w-12 h-12 rounded-2xl flex items-center justify-center">
-            <!-- calendar -->
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-          </div>
-          <div class="label text-sm text-gray-200">Memorias</div>
-        </a>
-
-        <a href="#" data-page="executors" class="navlink flex items-center gap-3 px-2 py-2 rounded-xl">
-          <div class="icon-btn w-12 h-12 rounded-2xl flex items-center justify-center">
-            <!-- lock -->
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-          </div>
-          <div class="label text-sm text-gray-200">Albaceas</div>
-        </a>
-
-        <a href="#" data-page="plans" class="navlink flex items-center gap-3 px-2 py-2 rounded-xl">
-          <div class="icon-btn w-12 h-12 rounded-2xl flex items-center justify-center">
-            <!-- spark -->
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm7 1a1 1 0 01.967.744L14.146 7.2l3.331 2.21a1 1 0 01.293 1.744l-2.653 1.72 1.433 3.428a1 1 0 01-1.617 1.057L12 15.583l-2.933 2.764a1 1 0 01-1.617-1.057l1.433-3.428L6.23 11.154a1 1 0 01.293-1.744l3.331-2.21L11.033 3.744A1 1 0 0112 3z" />
-            </svg>
-          </div>
-          <div class="label text-sm text-gray-200">Planes</div>
-        </a>
-      </nav>
-
-      <div class="text-[11px] text-gray-500 px-2 pb-2">
-        <span class="label">Hecho para iterar rápido.</span>
-      </div>
-    </aside>
+    </header>
 
     <!-- Main -->
-    <div id="appShell" class="flex-1 flex flex-col h-screen overflow-hidden">
+    <main id="main-content" class="flex-1 overflow-y-auto px-6 pb-44">
+      <!-- vistas aquí -->
+    </main>
 
-      <!-- Header -->
-      <header class="flex items-center justify-end px-6 py-4">
-        <div class="relative">
-          <button id="profileBtn" class="pill flex items-center gap-3 px-3 py-2 rounded-full hover:bg-white/5 transition">
-            <div class="w-10 h-10 rounded-full border-2 border-cyan-500/70 flex items-center justify-center font-extrabold text-cyan-300">F</div>
-            <div class="text-left leading-tight">
-              <div id="planLabel" class="text-xs font-extrabold text-cyan-400">FREE</div>
-              <div class="text-xs text-gray-300 flex items-center gap-2">
-                <span class="inline-flex items-center gap-1">
-                  <span>★</span><span id="tokenLabel">1</span>
-                </span>
-              </div>
-            </div>
-          </button>
-
-          <div id="profileMenu" class="hidden absolute right-0 mt-2 w-56 bg-[#1e1f22] border border-white/10 rounded-xl overflow-hidden shadow-2xl z-50">
-            <button class="w-full text-left px-4 py-3 hover:bg-white/5" data-page="profile">Perfil (stub)</button>
-            <button class="w-full text-left px-4 py-3 hover:bg-white/5" data-page="settings">Configuración (stub)</button>
-            <div class="h-px bg-white/10"></div>
-            <button class="w-full text-left px-4 py-3 text-cyan-300 hover:bg-white/5" data-page="plans">Mejora tu experiencia</button>
-          </div>
-        </div>
-      </header>
-
-      <!-- Content -->
-      <main id="main" class="flex-1 overflow-y-auto px-6 pb-28">
-        <!-- injected -->
-      </main>
-
-      <!-- Composer -->
-      <footer id="composerWrap" class="fixed bottom-6 left-[88px] right-0 px-6">
-        <div class="max-w-3xl mx-auto composer rounded-2xl p-4">
-          <div class="flex items-center justify-between text-xs text-gray-400 mb-3">
-            <button id="privacyBtn" class="flex items-center gap-2 hover:text-white transition" data-privacy="private" title="Cambiar privacidad">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span id="privacyLabel">Privada</span>
-            </button>
-            <span class="text-gray-500">MVP</span>
-          </div>
-
-          <div class="flex items-center gap-3">
-            <textarea id="capsuleInput" class="inputbox flex-1 rounded-xl px-4 py-3 h-14 resize-none outline-none focus:ring-2 focus:ring-cyan-500/60"
-              placeholder="Escribe tu cápsula aquí..."></textarea>
-
-            <button id="micBtn" class="pill w-12 h-12 rounded-xl flex items-center justify-center hover:bg-white/5 transition" title="Audio (stub)">
-              <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-              </svg>
-            </button>
-
-            <button id="sendBtn" class="w-12 h-12 rounded-xl bg-cyan-600 hover:bg-cyan-500 transition flex items-center justify-center" title="Publicar">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5 10l7-7m0 0l7 7m-7-7v18" />
-              </svg>
-            </button>
-          </div>
-
-          <div class="mt-3 text-[11px] text-gray-500">
-            Las cápsulas se guardan en tu navegador (localStorage). Esto es MVP.
-          </div>
-        </div>
-      </footer>
-
-      <!-- Toast -->
-      <div id="toast" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 text-white text-sm px-5 py-3 rounded-full">
-        OK
+    <!-- Action bar (footer) -->
+    <!-- IMPORTANTE: NO lo centres con max-w raro + left/right al mismo tiempo.
+         Lo centramos con contenedor interno, y NO tapa clicks del main por el wrapper. -->
+    <footer id="action-bar" class="fixed bottom-0 left-20 right-0 p-4 z-40 pointer-events-none">
+      <div class="max-w-2xl mx-auto pointer-events-auto">
+        <!-- barra de acción aquí -->
       </div>
+    </footer>
+  </div>
 
-      <!-- Modal root -->
-      <div id="modalRoot"></div>
+  <!-- toast -->
+  <div id="confirmation-message"
+       class="hidden fixed bottom-28 left-1/2 -translate-x-1/2 bg-emerald-500 text-white py-2 px-6 rounded-full shadow-lg text-center z-50">
+    Tu memoria ha sido publicada en tu legado.
+  </div>
+
+  <!-- Modal selector de albaceas -->
+  <div id="executor-modal" class="hidden fixed inset-0 z-50">
+    <div class="absolute inset-0 bg-black/60"></div>
+    <div class="relative max-w-lg mx-auto mt-24 bg-[#1e1f20] rounded-2xl border border-white/10 p-6 shadow-xl">
+      <h3 class="text-xl font-extrabold text-white">¿Quién puede ver esta cápsula?</h3>
+      <p class="text-sm text-gray-400 mt-1">Selecciona albaceas para cápsulas privadas.</p>
+
+      <div id="executor-modal-list" class="mt-4 space-y-2"></div>
+
+      <div class="mt-6 flex items-center justify-end gap-3">
+        <button class="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-white"
+                onclick="window.app.closeExecutorSelectionModal()">
+          Cancelar
+        </button>
+        <button class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold"
+                onclick="window.app.confirmExecutorSelection()">
+          Confirmar
+        </button>
+      </div>
     </div>
   </div>
 
   <script>
-    (function () {
-      // -------------------------
-      // State & Storage keys
-      // -------------------------
-      const LS = {
-        user: "evokaUserData",
-        capsules: "evokaCapsules",
-        executors: "evokaExecutors",
-        tokens: "evokaTokens",
-        lastReset: "evokaLastTokenReset",
-        dialogue: "evokaDialogue"
+    // --- App global ---
+    window.app = {};
+
+    // --- Data ---
+    let dailyTokens, executors, capsulesData, dialogueData, userData;
+    let tempCapsuleData = {};
+    let selectedExecutors = new Set();
+
+    // --- Init ---
+    document.addEventListener('DOMContentLoaded', () => {
+      app.loadDataFromLocalStorage();
+      app.loadStaticUI();
+      app.navigateTo('home');
+
+      window.addEventListener('click', (e) => {
+        const btn = document.getElementById('profile-button');
+        const menu = document.getElementById('profile-menu');
+        if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+          menu.classList.add('hidden');
+        }
+      });
+    });
+
+    // --- Storage ---
+    app.saveDataToLocalStorage = function() {
+      localStorage.setItem('evokaUserData', JSON.stringify(userData));
+      localStorage.setItem('evokaCapsules', JSON.stringify(capsulesData));
+      localStorage.setItem('evokaExecutors', JSON.stringify(executors));
+      localStorage.setItem('evokaTokens', String(dailyTokens));
+      localStorage.setItem('evokaDialogue', JSON.stringify(dialogueData));
+    };
+
+    app.loadDataFromLocalStorage = function() {
+      const savedUser = localStorage.getItem('evokaUserData');
+      const savedCapsules = localStorage.getItem('evokaCapsules');
+      const savedExecutors = localStorage.getItem('evokaExecutors');
+      const savedTokens = localStorage.getItem('evokaTokens');
+      const savedDialogue = localStorage.getItem('evokaDialogue');
+
+      userData = savedUser ? JSON.parse(savedUser) : {
+        fullName: "Felipe Arriarán",
+        username: "@felipe",
+        email: "felipe.a@email.com",
+        phone: "+56912345678",
+        birthDate: "1985-02-09",
+        plan: "free",
+        aiSettings: { type: "emotive", customPrompt: "" },
+        progress: 5
       };
 
-      let userData = null;
-      let capsulesData = [];
-      let executors = [];
-      let dailyTokens = 1;
-      let dialogueData = { lastAnswered: null, answers: {} };
+      capsulesData = savedCapsules ? JSON.parse(savedCapsules) : [];
+      executors = savedExecutors ? JSON.parse(savedExecutors) : ["Gisselle", "Agustín"];
+      dailyTokens = savedTokens !== null ? parseInt(savedTokens, 10) : 1;
+      dialogueData = savedDialogue ? JSON.parse(savedDialogue) : { lastAnswered: null, answers: {} };
+    };
 
-      // temp data for saving flow
-      let tempCapsule = { text: "", privacy: "private", allowedExecutors: [] };
+    // --- UI shell ---
+    app.toggleProfileMenu = function() {
+      document.getElementById('profile-menu')?.classList.toggle('hidden');
+    };
 
-      // -------------------------
-      // Utils
-      // -------------------------
-      const $ = (id) => document.getElementById(id);
+    app.loadStaticUI = function() {
+      const sideNav = document.getElementById('side-nav');
+      sideNav.innerHTML = `
+        ${app.navItem('home', 'Inicio', `
+          <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+        `)}
+        ${app.navItem('dialogue', 'Entrenamiento IA', `
+          <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+          </svg>
+        `)}
+        ${app.navItem('memories', 'Memorias', `
+          <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+        `)}
+        ${app.navItem('executors', 'Albaceas', `
+          <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+        `)}
+        ${app.navItem('plans', 'Planes', `
+          <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-12v2m0 12v2M4 8h2m12 0h2M4 16h2m12 0h2"></path>
+          </svg>
+        `)}
+      `;
+      app.updateTokenDisplay();
+    };
 
-      function escapeHTML(str) {
-        return String(str)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
+    app.navItem = function(page, label, iconSVG) {
+      return `
+        <a href="#"
+           onclick="window.app.navigateTo('${page}')"
+           data-page="${page}"
+           class="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-700 text-white transition border border-transparent">
+          ${iconSVG}
+          <span class="nav-text font-semibold">${label}</span>
+        </a>
+      `;
+    };
+
+    // --- Router ---
+    app.navigateTo = function(page) {
+      const main = document.getElementById('main-content');
+      const actionBar = document.getElementById('action-bar')?.firstElementChild;
+
+      document.querySelectorAll('#side-nav a').forEach(a => {
+        a.classList.toggle('bg-gray-700', a.getAttribute('data-page') === page);
+        a.classList.toggle('border-white/10', a.getAttribute('data-page') === page);
+      });
+
+      if (page === 'home') {
+        main.innerHTML = app.getHomeViewHTML();
+        actionBar.innerHTML = app.getHomeActionBarHTML();
+        app.updateTokenDisplay();
+        return;
       }
 
-      function nowISO() { return new Date().toISOString(); }
-
-      function prettyDate(iso) {
-        try {
-          const d = new Date(iso);
-          return d.toLocaleString("es-CL", { year:"numeric", month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit" });
-        } catch { return iso; }
+      if (page === 'dialogue') {
+        main.innerHTML = app.getDialogueViewHTML();
+        actionBar.innerHTML = '';
+        return;
       }
 
-      function toast(msg) {
-        const el = $("toast");
-        el.textContent = msg;
-        el.classList.remove("hidden");
-        clearTimeout(window.__toastT);
-        window.__toastT = setTimeout(() => el.classList.add("hidden"), 2200);
+      if (page === 'executors') {
+        main.innerHTML = app.getExecutorsViewHTML();
+        actionBar.innerHTML = '';
+        return;
       }
 
-      function saveAll() {
-        localStorage.setItem(LS.user, JSON.stringify(userData));
-        localStorage.setItem(LS.capsules, JSON.stringify(capsulesData));
-        localStorage.setItem(LS.executors, JSON.stringify(executors));
-        localStorage.setItem(LS.tokens, String(dailyTokens));
-        localStorage.setItem(LS.dialogue, JSON.stringify(dialogueData));
+      if (page === 'plans') {
+        main.innerHTML = app.getPlansViewHTML();
+        actionBar.innerHTML = '';
+        return;
       }
 
-      function loadAll() {
-        const savedUser = localStorage.getItem(LS.user);
-        const savedCaps = localStorage.getItem(LS.capsules);
-        const savedExec = localStorage.getItem(LS.executors);
-        const savedTok = localStorage.getItem(LS.tokens);
-        const savedDia = localStorage.getItem(LS.dialogue);
-
-        userData = savedUser ? JSON.parse(savedUser) : {
-          fullName: "Felipe Arriarán",
-          username: "@felipe",
-          plan: "free", // free | premium | pro
-          progress: 5
-        };
-
-        capsulesData = savedCaps ? JSON.parse(savedCaps) : [];
-        executors = savedExec ? JSON.parse(savedExec) : ["Gisselle", "Agustín"];
-        dailyTokens = savedTok !== null ? parseInt(savedTok, 10) : 1;
-        dialogueData = savedDia ? JSON.parse(savedDia) : { lastAnswered: null, answers: {} };
+      if (page === 'memories') {
+        main.innerHTML = app.getMemoriesViewHTML();
+        actionBar.innerHTML = '';
+        return;
       }
 
-      function resetTokensIfNewDay() {
-        const today = new Date().toISOString().split("T")[0];
-        const last = localStorage.getItem(LS.lastReset);
-
-        if (last !== today) {
-          if ((userData?.plan || "free") === "free") {
-            dailyTokens = 1;
-            localStorage.setItem(LS.tokens, String(dailyTokens));
-          }
-          localStorage.setItem(LS.lastReset, today);
-        }
-      }
-
-      function tokenCapacityForPlan() {
-        const p = userData?.plan || "free";
-        if (p === "premium") return 24;
-        if (p === "pro") return Infinity;
-        return 1;
-      }
-
-      function requireTokensOrBlock() {
-        const p = userData?.plan || "free";
-        if (p !== "free") return true;
-        if (dailyTokens > 0) return true;
-
-        // block UI
-        $("capsuleInput").value = "";
-        $("capsuleInput").placeholder = "Vuelve mañana para más cápsulas.";
-        $("capsuleInput").disabled = true;
-        $("sendBtn").disabled = true;
-        $("sendBtn").classList.remove("bg-cyan-600","hover:bg-cyan-500");
-        $("sendBtn").classList.add("bg-gray-600","cursor-not-allowed");
-
-        toast("Sin tokens por hoy. Vuelve mañana o mejora tu plan.");
-        renderHeaderTokens();
-        return false;
-      }
-
-      function consumeTokenIfNeeded() {
-        const p = userData?.plan || "free";
-        if (p !== "free") return;
-        dailyTokens = Math.max(0, dailyTokens - 1);
-        localStorage.setItem(LS.tokens, String(dailyTokens));
-        renderHeaderTokens();
-        if (dailyTokens <= 0) requireTokensOrBlock();
-      }
-
-      // -------------------------
-      // UI: Header, Nav, Profile
-      // -------------------------
-      function renderHeaderTokens() {
-        const plan = userData?.plan || "free";
-        $("planLabel").textContent = plan === "free" ? "FREE" : (plan === "premium" ? "PREMIUM" : "PRO");
-
-        if (plan === "premium") $("tokenLabel").textContent = "24";
-        else if (plan === "pro") $("tokenLabel").innerHTML = "∞";
-        else $("tokenLabel").textContent = String(dailyTokens);
-      }
-
-      function setActiveNav(page) {
-        document.querySelectorAll(".navlink").forEach(a => {
-          const is = a.getAttribute("data-page") === page;
-          const icon = a.querySelector(".icon-btn");
-          icon.classList.toggle("active", is);
-        });
-      }
-
-      function toggleProfileMenu(forceClose=false) {
-        const m = $("profileMenu");
-        if (forceClose) return m.classList.add("hidden");
-        m.classList.toggle("hidden");
-      }
-
-      // -------------------------
-      // Views
-      // -------------------------
-      function viewHome() {
-        return `
-          <div class="fade-in min-h-[60vh] flex items-center justify-center text-center">
-            <div>
-              <h1 class="text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-                Hola ${escapeHTML(userData.fullName || "Usuario")}
-              </h1>
-              <p class="text-gray-400 mt-3 text-lg">¿Qué recuerdo quieres evocar hoy?</p>
-            </div>
+      main.innerHTML = `
+        <div class="fade-in min-h-[60vh] flex items-center justify-center text-center">
+          <div class="max-w-xl">
+            <h1 class="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+              Página de ${page} en construcción.
+            </h1>
+            <p class="text-gray-400 mt-2">Está viva, pero todavía no sabe caminar.</p>
           </div>
-        `;
-      }
+        </div>
+      `;
+      actionBar.innerHTML = '';
+    };
 
-      function getDailyQuestions() {
-        const all = [
-          "¿Qué es lo que más te apasiona en este momento de tu vida?",
-          "Si pudieras darle un consejo a tu yo de hace 10 años, ¿cuál sería?",
-          "Describe un lugar donde te sientas completamente en paz.",
-          "¿Cuál es el mayor riesgo que has tomado?",
-          "¿Qué canción te transporta instantáneamente a un recuerdo feliz?",
-          "¿Hay algún sueño que dejaste ir y que a veces extrañas?",
-          "¿Qué cualidad valoras más en un amigo?",
-          "Si tuvieras un día libre, sin obligaciones, ¿qué harías?",
-          "¿Cuál es un pequeño placer que te alegra el día?"
-        ];
-        const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-        const start = (dayOfYear * 3) % all.length;
-        return [all[start], all[(start+1)%all.length], all[(start+2)%all.length]];
-      }
+    // --- Views ---
+    app.getHomeViewHTML = function() {
+      return `
+        <section class="fade-in min-h-[70vh] flex items-center justify-center text-center">
+          <div class="max-w-2xl">
+            <h1 class="text-5xl md:text-6xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+              Hola Felipe
+            </h1>
+            <p class="text-gray-400 mt-3 text-lg">¿Qué recuerdo quieres evocar hoy?</p>
+          </div>
+        </section>
+      `;
+    };
 
-      function viewDialogue() {
-        const today = new Date().toISOString().split("T")[0];
-        const has = dialogueData.lastAnswered === today;
+    app.getHomeActionBarHTML = function() {
+      return `
+        <div class="bg-[#1e1f20]/90 rounded-2xl p-3 shadow-lg border border-white/10 backdrop-blur">
+          <div class="flex items-center justify-between px-3 pb-2">
+            <button id="privacy-toggle"
+              onclick="window.app.togglePrivacy(this)"
+              data-privacy="private"
+              class="flex items-center gap-2 text-xs text-gray-400 hover:text-white transition">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+              <span>Privada</span>
+            </button>
 
-        const progress = Math.min(100, userData.progress || 5);
-        let level = "Conocimiento Básico";
-        if (progress > 30) level = "Entendimiento Emocional";
-        if (progress > 70) level = "Sincronización Profunda";
+            <span class="text-xs text-gray-500">MVP</span>
+          </div>
 
-        let content = "";
-        if (has) {
-          content = `
-            <div class="bg-[#17181a] border border-white/10 rounded-2xl p-6 text-center">
-              <div class="text-gray-200 font-semibold">Listo por hoy.</div>
-              <div class="text-gray-400 text-sm mt-2">Vuelve mañana para nuevas preguntas.</div>
-            </div>
-          `;
-        } else {
-          const qs = getDailyQuestions();
-          content = `
-            <div class="space-y-4">
-              ${qs.map((q,i)=>`
-                <div class="bg-[#17181a] border border-white/10 rounded-2xl p-4">
-                  <div class="font-semibold text-gray-200">${escapeHTML(q)}</div>
-                  <textarea id="q${i}" class="mt-3 w-full h-24 inputbox rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-cyan-500/60"
-                    placeholder="Tu respuesta..."></textarea>
-                </div>
-              `).join("")}
-              <button id="saveDialogueBtn" class="w-full bg-cyan-600 hover:bg-cyan-500 transition text-white font-bold py-3 rounded-xl">
-                Enviar Respuestas
+          <div class="relative">
+            <textarea id="capsule-input"
+              class="w-full min-h-[56px] max-h-44 bg-transparent text-gray-200 rounded-xl p-3 pr-24 border border-white/10 focus:ring-2 focus:ring-cyan-500 resize-none"
+              placeholder="Escribe tu cápsula aquí..."></textarea>
+
+            <div class="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+              <button onclick="window.app.toggleRecording()" id="record-button"
+                class="p-2 hover:bg-gray-700 rounded-full" title="Grabar audio">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                </svg>
+              </button>
+
+              <button id="save-button" onclick="window.app.saveCapsule()"
+                class="p-2 bg-cyan-600 hover:bg-cyan-500 rounded-full" title="Publicar Cápsula">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+                </svg>
               </button>
             </div>
-          `;
-        }
+          </div>
+        </div>
+      `;
+    };
 
-        return `
-          <section class="fade-in max-w-3xl mx-auto">
-            <h2 class="text-3xl font-extrabold text-white">Entrenamiento IA</h2>
-            <p class="text-gray-400 mt-1 mb-6">Ayuda a tu mente paralela a conocerte mejor.</p>
+    app.getExecutorsViewHTML = function() {
+      const list = executors.map(e => `
+        <li class="flex justify-between items-center bg-gray-800/60 p-3 rounded-xl border border-white/10">
+          <span class="text-gray-200 font-semibold">${e}</span>
+          <button class="text-red-400 hover:text-red-300 text-2xl leading-none"
+                  onclick="window.app.removeExecutor('${e}')">&times;</button>
+        </li>
+      `).join('');
 
-            <div class="bg-[#17181a] border border-white/10 rounded-2xl p-5 mb-6">
-              <div class="flex items-center justify-between text-sm">
-                <span class="font-bold text-gray-300">Grado de sincronización</span>
-                <span class="font-extrabold text-cyan-300">${progress}%</span>
-              </div>
-              <div class="mt-3 w-full h-2.5 bg-white/10 rounded-full overflow-hidden">
-                <div class="h-2.5 bg-cyan-500" style="width:${progress}%"></div>
-              </div>
-              <div class="text-center text-xs text-gray-500 mt-2">${escapeHTML(level)}</div>
+      return `
+        <section class="fade-in max-w-3xl mx-auto">
+          <h2 class="text-3xl font-extrabold mb-6 text-white flex items-center gap-3">
+            <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            Tus Albaceas Digitales
+          </h2>
+
+          <div class="bg-[#1e1f20] rounded-2xl p-6 space-y-6 border border-white/10">
+            <div class="bg-gray-800/40 border border-cyan-500/20 text-cyan-200 p-4 rounded-xl">
+              <h3 class="font-extrabold">¿Qué es un Albacea Digital?</h3>
+              <p class="text-sm mt-1 text-gray-300">
+                Persona de confianza con acceso a tus cápsulas privadas. Guardián del legado.
+              </p>
             </div>
 
-            ${content}
-          </section>
-        `;
-      }
+            <div>
+              <h3 class="font-bold text-lg text-gray-200 mb-3">Lista de Albaceas</h3>
+              <ul class="space-y-3">${list || `<li class="text-gray-400">No tienes albaceas aún.</li>`}</ul>
 
-      function viewExecutors() {
-        const list = executors.map(name => `
-          <li class="flex items-center justify-between bg-[#17181a] border border-white/10 rounded-2xl px-4 py-3">
-            <span class="text-gray-200 font-semibold">${escapeHTML(name)}</span>
-            <button class="text-red-300 hover:text-red-200 text-2xl leading-none" data-remove="${escapeHTML(name)}" title="Eliminar">&times;</button>
-          </li>
-        `).join("");
-
-        return `
-          <section class="fade-in max-w-3xl mx-auto">
-            <h2 class="text-3xl font-extrabold text-white">Albaceas Digitales</h2>
-            <p class="text-gray-400 mt-1 mb-6">Quienes podrán ver tus memorias privadas.</p>
-
-            <div class="bg-[#17181a] border border-white/10 rounded-2xl p-6">
-              <div class="bg-white/5 border border-cyan-500/20 rounded-2xl p-4 text-sm text-gray-300">
-                <div class="font-bold text-cyan-200">¿Qué es un albacea?</div>
-                <div class="mt-1">Persona de confianza que tendrá acceso a tus cápsulas privadas seleccionadas.</div>
-              </div>
-
-              <div class="mt-6">
-                <div class="flex items-center justify-between">
-                  <div class="font-bold text-gray-200">Lista</div>
-                  <div class="text-xs text-gray-500">${executors.length} registrados</div>
-                </div>
-                <ul class="mt-3 space-y-3">${list || `<li class="text-gray-500">No tienes albaceas todavía.</li>`}</ul>
-
-                <button id="addExecutorBtn" class="mt-6 w-full bg-cyan-600 hover:bg-cyan-500 transition text-white font-bold py-3 rounded-xl">
-                  + Añadir albacea
-                </button>
-              </div>
-            </div>
-          </section>
-        `;
-      }
-
-      function viewPlans() {
-        const plan = userData?.plan || "free";
-        const badge = (p) => plan === p ? `<span class="text-xs text-cyan-200 font-bold">ACTUAL</span>` : "";
-
-        return `
-          <section class="fade-in max-w-3xl mx-auto text-center">
-            <h2 class="text-3xl font-extrabold text-white">Planes EVOKA</h2>
-            <p class="text-gray-400 mt-1 mb-8">Esto es UI + lógica básica. Pago real: no implementado.</p>
-
-            <div class="grid md:grid-cols-3 gap-5 text-left">
-
-              <div class="bg-[#17181a] border border-cyan-500/35 rounded-2xl p-5">
-                <div class="flex items-center justify-between">
-                  <div class="text-white font-extrabold text-xl">Gratis</div>
-                  ${badge("free")}
-                </div>
-                <div class="text-gray-400 mt-1">$0</div>
-                <ul class="text-gray-400 text-sm mt-4 space-y-2">
-                  <li>✓ 1 cápsula por día</li>
-                  <li>✓ Albaceas básicos</li>
-                  <li>✓ Memorias locales</li>
-                </ul>
-                <button class="mt-5 w-full py-2.5 rounded-xl bg-white/10 text-gray-300 cursor-not-allowed" disabled>Plan actual</button>
-              </div>
-
-              <div class="bg-[#17181a] border border-white/10 rounded-2xl p-5">
-                <div class="flex items-center justify-between">
-                  <div class="text-cyan-300 font-extrabold text-xl">Premium</div>
-                  ${badge("premium")}
-                </div>
-                <div class="text-gray-200 mt-1">$7 / mes</div>
-                <ul class="text-gray-400 text-sm mt-4 space-y-2">
-                  <li>✓ 24 “tokens” diarios (mock)</li>
-                  <li>✓ Más albaceas</li>
-                  <li>✓ Base para “Yo PRIME”</li>
-                </ul>
-                <button data-setplan="premium" class="mt-5 w-full py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 transition text-white font-bold">
-                  Activar (mock)
-                </button>
-              </div>
-
-              <div class="bg-[#17181a] border border-white/10 rounded-2xl p-5">
-                <div class="flex items-center justify-between">
-                  <div class="text-white font-extrabold text-xl">Pro</div>
-                  ${badge("pro")}
-                </div>
-                <div class="text-gray-200 mt-1">$15 / mes</div>
-                <ul class="text-gray-400 text-sm mt-4 space-y-2">
-                  <li>✓ Tokens ilimitados (mock)</li>
-                  <li>✓ Albaceas ilimitados</li>
-                  <li>✓ Cronología / mente paralela (futuro)</li>
-                </ul>
-                <button data-setplan="pro" class="mt-5 w-full py-2.5 rounded-xl bg-white/10 hover:bg-white/15 transition text-white font-bold">
-                  Activar (mock)
-                </button>
-              </div>
-
-            </div>
-          </section>
-        `;
-      }
-
-      function viewMemories() {
-        // newest first
-        const items = Array.isArray(capsulesData) ? capsulesData : [];
-        const list = items.map(c => {
-          const privacy = c.privacy === "public" ? "Pública" : "Privada";
-          const badge = c.privacy === "public"
-            ? `<span class="text-xs px-2 py-1 rounded-full bg-cyan-500/15 text-cyan-200 border border-cyan-500/20">Pública</span>`
-            : `<span class="text-xs px-2 py-1 rounded-full bg-white/5 text-gray-200 border border-white/10">Privada</span>`;
-
-          const exec = (c.privacy === "private" && Array.isArray(c.allowedExecutors) && c.allowedExecutors.length)
-            ? `<div class="text-xs text-gray-500 mt-2">Albaceas: ${c.allowedExecutors.map(escapeHTML).join(", ")}</div>`
-            : "";
-
-          return `
-            <div class="bg-[#17181a] border border-white/10 rounded-2xl p-5">
-              <div class="flex items-center justify-between gap-3">
-                <div class="text-gray-300 text-sm">${escapeHTML(prettyDate(c.createdAt))}</div>
-                <div class="flex items-center gap-2">${badge}</div>
-              </div>
-              <div class="mt-3 text-gray-100 whitespace-pre-wrap">${escapeHTML(c.text)}</div>
-              ${exec}
-            </div>
-          `;
-        }).join("");
-
-        return `
-          <section class="fade-in max-w-3xl mx-auto">
-            <div class="flex items-end justify-between">
-              <div>
-                <h2 class="text-3xl font-extrabold text-white">Memorias</h2>
-                <p class="text-gray-400 mt-1">Guardadas en tu navegador (MVP local).</p>
-              </div>
-              <div class="text-xs text-gray-500">${items.length} total</div>
-            </div>
-
-            <div class="mt-6 space-y-4">
-              ${list || `<div class="text-gray-500 bg-[#17181a] border border-white/10 rounded-2xl p-6">Aún no hay memorias. Escribe una cápsula abajo y publícala.</div>`}
-            </div>
-          </section>
-        `;
-      }
-
-      function viewStub(title) {
-        return `
-          <div class="fade-in min-h-[60vh] flex items-center justify-center text-center">
-            <div class="bg-[#17181a] border border-white/10 rounded-2xl p-8 max-w-xl">
-              <div class="text-2xl font-extrabold text-white">${escapeHTML(title)}</div>
-              <div class="text-gray-400 mt-2">Página en construcción. MVP primero, glamour después.</div>
+              <button onclick="window.app.addExecutor()"
+                class="mt-6 w-full bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold py-3 px-4 rounded-xl transition">
+                + Añadir Nuevo Albacea
+              </button>
             </div>
           </div>
-        `;
-      }
+        </section>
+      `;
+    };
 
-      // -------------------------
-      // Modal: Executors selection
-      // -------------------------
-      function openExecutorModal() {
-        const root = $("modalRoot");
-        const options = executors.map(name => `
-          <label class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5">
-            <input type="checkbox" class="w-4 h-4" value="${escapeHTML(name)}">
-            <span class="text-gray-200">${escapeHTML(name)}</span>
-          </label>
-        `).join("");
+    app.getPlansViewHTML = function() {
+      return `
+        <section class="fade-in max-w-3xl mx-auto text-center">
+          <h2 class="text-3xl font-extrabold mb-2 text-white">Elige tu Plan EVOKA</h2>
+          <p class="text-gray-400 mb-8">Desbloquea todo el potencial de tu legado.</p>
 
-        root.innerHTML = `
-          <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-            <div class="w-full max-w-md bg-[#17181a] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-              <div class="flex items-start justify-between p-5">
-                <div>
-                  <div class="text-xl font-extrabold text-white">Selecciona albaceas</div>
-                  <div class="text-gray-400 text-sm mt-1">Esta memoria será privada y visible solo para los albaceas elegidos.</div>
-                </div>
-                <button id="modalX" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
-              </div>
+          <div class="grid md:grid-cols-3 gap-4 text-left">
+            <div class="bg-[#1e1f20] rounded-2xl p-6 border-2 border-cyan-500">
+              <h3 class="text-2xl font-extrabold text-white">GRATIS</h3>
+              <p class="text-xl font-bold my-2 text-gray-300">$0 USD</p>
+              <ul class="text-gray-400 space-y-2 my-4">
+                <li><span class="text-cyan-400">✓</span> 1 cápsula por día</li>
+                <li><span class="text-cyan-400">✓</span> 1 albacea digital</li>
+                <li><span class="text-cyan-400">✓</span> Acceso a memorias</li>
+              </ul>
+              <button class="w-full bg-gray-700 text-gray-300 font-extrabold py-2 px-4 rounded-xl cursor-default">
+                Plan Actual
+              </button>
+            </div>
 
-              <div class="px-5 pb-4">
-                <div class="bg-white/5 border border-white/10 rounded-2xl p-3 max-h-56 overflow-y-auto">
-                  ${options || `<div class="text-gray-500 text-sm">No tienes albaceas aún. Ve a Albaceas y agrega uno.</div>`}
-                </div>
-              </div>
+            <div class="bg-[#1e1f20] rounded-2xl p-6 border border-white/10">
+              <h3 class="text-2xl font-extrabold text-cyan-300">PREMIUM</h3>
+              <p class="text-xl font-bold my-2 text-white">$7 USD / mes</p>
+              <ul class="text-gray-400 space-y-2 my-4">
+                <li><span class="text-cyan-400">✓</span> 20 cápsulas mensuales</li>
+                <li><span class="text-cyan-400">✓</span> 5 albaceas digitales</li>
+                <li><span class="text-cyan-400">✓</span> “Mi yo PRIME”</li>
+                <li><span class="text-cyan-400">✓</span> Eventos especiales</li>
+              </ul>
+              <button onclick="alert('MVP: aquí iría el pago 😄')"
+                class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold py-2 px-4 rounded-xl transition">
+                Seleccionar Plan
+              </button>
+            </div>
 
-              <div class="p-5 pt-0 flex gap-3 justify-end">
-                <button id="modalCancel" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 transition">Cancelar</button>
-                <button id="modalSave" class="px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 transition text-white font-bold">Guardar privada</button>
-              </div>
+            <div class="bg-[#1e1f20] rounded-2xl p-6 border border-white/10">
+              <h3 class="text-2xl font-extrabold text-white">PREMIUM PRO</h3>
+              <p class="text-xl font-bold my-2 text-white">$15 USD / mes</p>
+              <ul class="text-gray-400 space-y-2 my-4">
+                <li><span class="text-cyan-400">✓</span> Cápsulas ilimitadas</li>
+                <li><span class="text-cyan-400">✓</span> Albaceas ilimitados</li>
+                <li><span class="text-cyan-400">✓</span> Mente paralela</li>
+              </ul>
+              <button onclick="alert('MVP: aquí iría el pago 😄')"
+                class="w-full bg-gray-700 hover:bg-gray-600 text-white font-extrabold py-2 px-4 rounded-xl transition">
+                Seleccionar Plan
+              </button>
             </div>
           </div>
+        </section>
+      `;
+    };
+
+    app.getMemoriesViewHTML = function() {
+      const items = (capsulesData || []).slice().reverse().map(c => `
+        <div class="bg-[#1e1f20] rounded-2xl p-5 border border-white/10">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-gray-400">${new Date(c.createdAt).toLocaleString()}</span>
+            <span class="text-xs font-bold ${c.privacy === 'private' ? 'text-amber-300' : 'text-emerald-300'}">
+              ${c.privacy === 'private' ? 'Privada' : 'Pública'}
+            </span>
+          </div>
+          <p class="mt-3 text-gray-200 whitespace-pre-wrap">${app.escapeHTML(c.text)}</p>
+          ${c.executors?.length ? `<p class="mt-3 text-xs text-gray-500">Albaceas: ${c.executors.join(', ')}</p>` : ''}
+        </div>
+      `).join('');
+
+      return `
+        <section class="fade-in max-w-3xl mx-auto">
+          <h2 class="text-3xl font-extrabold mb-6 text-white">Memorias</h2>
+          <div class="space-y-4">
+            ${items || `<div class="text-gray-400 bg-[#1e1f20] rounded-2xl p-6 border border-white/10">Aún no hay memorias. Escribe una cápsula en Inicio.</div>`}
+          </div>
+        </section>
+      `;
+    };
+
+    app.getDialogueViewHTML = function() {
+      const today = new Date().toISOString().split('T')[0];
+      const hasAnsweredToday = dialogueData.lastAnswered === today;
+
+      const progress = userData.progress || 5;
+      let level = "Conocimiento Básico";
+      if (progress > 30) level = "Entendimiento Emocional";
+      if (progress > 70) level = "Sincronización Profunda";
+
+      let contentHTML = '';
+      if (hasAnsweredToday) {
+        contentHTML = `
+          <div class="bg-[#1e1f20] rounded-2xl p-6 text-center border border-white/10">
+            <p class="text-gray-200 font-bold">Listo por hoy.</p>
+            <p class="text-gray-400 text-sm mt-2">Vuelve mañana para seguir entrenando tu mente paralela.</p>
+          </div>
         `;
+      } else {
+        const qs = app.getDailyQuestions();
+        const questionsHTML = qs.map((q, i) => `
+          <div class="bg-[#1e1f20] rounded-2xl p-5 border border-white/10">
+            <label for="q${i}" class="font-bold text-gray-200">${q}</label>
+            <textarea id="q${i}" class="mt-3 w-full h-24 bg-gray-900/40 text-gray-200 rounded-xl p-3 border border-white/10 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition"
+              placeholder="Tu respuesta..."></textarea>
+          </div>
+        `).join('');
 
-        const close = () => { root.innerHTML = ""; };
-
-        $("modalX").onclick = close;
-        $("modalCancel").onclick = close;
-
-        $("modalSave").onclick = () => {
-          const checked = Array.from(root.querySelectorAll('input[type="checkbox"]'))
-            .filter(i => i.checked)
-            .map(i => i.value);
-
-          if (!checked.length) return toast("Selecciona al menos 1 albacea.");
-          tempCapsule.allowedExecutors = checked;
-          close();
-          finalizeSave("private");
-        };
+        contentHTML = `
+          <div class="space-y-4">${questionsHTML}</div>
+          <button onclick="window.app.saveDialogueAnswers()"
+            class="w-full mt-6 bg-cyan-600 hover:bg-cyan-500 text-white font-extrabold py-3 px-4 rounded-xl transition">
+            Enviar Respuestas
+          </button>
+        `;
       }
 
-      // -------------------------
-      // Save capsule flow
-      // -------------------------
-      function finalizeSave(privacy) {
-        if (!requireTokensOrBlock()) return;
+      return `
+        <section class="fade-in max-w-3xl mx-auto">
+          <h2 class="text-3xl font-extrabold mb-2 text-white">Entrenamiento IA</h2>
+          <p class="text-gray-400 mb-6">Ayuda a tu mente paralela a conocerte mejor.</p>
 
-        const text = (tempCapsule.text || "").trim();
-        if (!text) return toast("No hay texto para guardar.");
+          <div class="bg-[#1e1f20] rounded-2xl p-6 space-y-3 mb-6 border border-white/10">
+            <div class="flex justify-between items-center text-sm">
+              <span class="font-bold text-gray-300">Grado de Sincronización</span>
+              <span class="font-extrabold text-cyan-300">${progress}%</span>
+            </div>
+            <div class="w-full bg-gray-700 rounded-full h-2.5">
+              <div class="bg-cyan-500 h-2.5 rounded-full" style="width:${progress}%"></div>
+            </div>
+            <p class="text-center text-xs text-gray-400">${level}</p>
+          </div>
 
-        const capsule = {
-          id: `cap_${Date.now()}_${Math.random().toString(16).slice(2)}`,
-          createdAt: nowISO(),
-          text,
-          privacy, // "public" | "private"
-          allowedExecutors: privacy === "private" ? (tempCapsule.allowedExecutors || []) : [],
-          author: userData?.fullName || "Usuario"
-        };
+          ${contentHTML}
+        </section>
+      `;
+    };
 
-        capsulesData = Array.isArray(capsulesData) ? capsulesData : [];
-        capsulesData.unshift(capsule);
+    // --- Core features ---
+    app.updateTokenDisplay = function() {
+      const tokenCountEl = document.getElementById('token-count');
+      const userStatusEl = document.getElementById('user-status');
+      const saveButton = document.getElementById('save-button');
+      const capsuleInput = document.getElementById('capsule-input');
 
-        saveAll();
-        consumeTokenIfNeeded();
-
-        $("capsuleInput").value = "";
-        tempCapsule = { text:"", privacy:"private", allowedExecutors:[] };
-
-        toast("Tu memoria ha sido publicada en tu legado.");
-        navigateTo("memories");
+      if (tokenCountEl && userStatusEl) {
+        if (userData.plan === 'premium') {
+          tokenCountEl.innerHTML = '24';
+          userStatusEl.textContent = 'PREMIUM';
+        } else if (userData.plan === 'pro') {
+          tokenCountEl.innerHTML = '&infin;';
+          userStatusEl.textContent = 'PRO';
+        } else {
+          tokenCountEl.textContent = dailyTokens;
+          userStatusEl.textContent = 'FREE';
+        }
       }
 
-      // -------------------------
-      // Navigation
-      // -------------------------
-      function navigateTo(page) {
-        toggleProfileMenu(true);
-        setActiveNav(page);
-
-        const main = $("main");
-        if (page === "home") main.innerHTML = viewHome();
-        else if (page === "dialogue") main.innerHTML = viewDialogue();
-        else if (page === "memories") main.innerHTML = viewMemories();
-        else if (page === "executors") main.innerHTML = viewExecutors();
-        else if (page === "plans") main.innerHTML = viewPlans();
-        else main.innerHTML = viewStub(page);
-
-        // composer only on home/memories (tu eliges)
-        const showComposer = (page === "home" || page === "memories");
-        $("composerWrap").style.display = showComposer ? "block" : "none";
-
-        // attach page-specific handlers
-        bindDynamicHandlers(page);
-      }
-
-      function bindDynamicHandlers(page) {
-        if (page === "dialogue") {
-          const btn = $("saveDialogueBtn");
-          if (btn) {
-            btn.onclick = () => {
-              const a0 = $("q0").value.trim();
-              const a1 = $("q1").value.trim();
-              const a2 = $("q2").value.trim();
-              if (!a0 || !a1 || !a2) return toast("Responde las 3 preguntas.");
-
-              const today = new Date().toISOString().split("T")[0];
-              dialogueData.lastAnswered = today;
-              dialogueData.answers[today] = [a0,a1,a2];
-              userData.progress = Math.min(100, (userData.progress || 5) + 2);
-
-              saveAll();
-              toast("Respuestas guardadas.");
-              navigateTo("dialogue");
-            };
+      if (saveButton && userData.plan === 'free') {
+        if (dailyTokens <= 0) {
+          saveButton.disabled = true;
+          saveButton.classList.add('bg-gray-500', 'cursor-not-allowed');
+          saveButton.classList.remove('bg-cyan-600', 'hover:bg-cyan-500');
+          if (capsuleInput) {
+            capsuleInput.placeholder = 'Vuelve mañana para más cápsulas.';
+            capsuleInput.disabled = true;
           }
-        }
-
-        if (page === "executors") {
-          const addBtn = $("addExecutorBtn");
-          if (addBtn) {
-            addBtn.onclick = () => {
-              const name = prompt("Nombre del albacea (ej: Gisselle):");
-              if (!name) return;
-              const clean = name.trim();
-              if (!clean) return;
-              if (executors.includes(clean)) return toast("Ya existe ese albacea.");
-              executors.push(clean);
-              saveAll();
-              toast("Albacea agregado.");
-              navigateTo("executors");
-            };
-          }
-
-          document.querySelectorAll("[data-remove]").forEach(btn => {
-            btn.onclick = () => {
-              const name = btn.getAttribute("data-remove");
-              executors = executors.filter(e => e !== name);
-              saveAll();
-              toast("Albacea eliminado.");
-              navigateTo("executors");
-            };
-          });
-        }
-
-        if (page === "plans") {
-          document.querySelectorAll("[data-setplan]").forEach(btn => {
-            btn.onclick = () => {
-              const p = btn.getAttribute("data-setplan");
-              userData.plan = p;
-              // reset UI tokens behavior
-              if (p === "free") {
-                dailyTokens = Math.min(dailyTokens, 1);
-              }
-              $("capsuleInput").disabled = false;
-              $("sendBtn").disabled = false;
-              $("sendBtn").classList.remove("bg-gray-600","cursor-not-allowed");
-              $("sendBtn").classList.add("bg-cyan-600","hover:bg-cyan-500");
-              $("capsuleInput").placeholder = "Escribe tu cápsula aquí...";
-              saveAll();
-              renderHeaderTokens();
-              toast(`Plan cambiado a ${p.toUpperCase()} (mock).`);
-              navigateTo("plans");
-            };
-          });
+        } else {
+          saveButton.disabled = false;
+          saveButton.classList.remove('bg-gray-500', 'cursor-not-allowed');
+          saveButton.classList.add('bg-cyan-600', 'hover:bg-cyan-500');
+          if (capsuleInput) capsuleInput.disabled = false;
         }
       }
+    };
 
-      // -------------------------
-      // Events (static)
-      // -------------------------
-      function bindStaticEvents() {
-        // nav clicks
-        document.querySelectorAll(".navlink").forEach(a => {
-          a.onclick = (e) => {
-            e.preventDefault();
-            navigateTo(a.getAttribute("data-page"));
-          };
-        });
+    app.togglePrivacy = function(button) {
+      const isPrivate = button.dataset.privacy === 'private';
+      if (isPrivate) {
+        button.dataset.privacy = 'public';
+        button.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h8a2 2 0 002-2v-1a2 2 0 012-2h1.945"></path>
+          </svg>
+          <span>Pública</span>
+        `;
+      } else {
+        button.dataset.privacy = 'private';
+        button.innerHTML = `
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+          <span>Privada</span>
+        `;
+      }
+    };
 
-        // profile menu
-        $("profileBtn").onclick = () => toggleProfileMenu(false);
-        window.addEventListener("click", (e) => {
-          const btn = $("profileBtn");
-          const menu = $("profileMenu");
-          if (!btn.contains(e.target) && !menu.contains(e.target)) toggleProfileMenu(true);
-        });
-        $("profileMenu").querySelectorAll("button[data-page]").forEach(b => {
+    app.saveCapsule = function() {
+      if (dailyTokens <= 0 && userData.plan === 'free') return;
+
+      const input = document.getElementById('capsule-input');
+      const text = (input?.value || '').trim();
+      const privacyToggle = document.getElementById('privacy-toggle');
+      const privacy = privacyToggle ? privacyToggle.dataset.privacy : 'private';
+
+      if (!text) {
+        alert("No hay nada que guardar.");
+        return;
+      }
+
+      tempCapsuleData = { text, privacy, executors: [] };
+
+      if (privacy === 'private') {
+        app.openExecutorSelectionModal();
+      } else {
+        app.finalizeCapsuleSave([]);
+      }
+    };
+
+    app.openExecutorSelectionModal = function() {
+      selectedExecutors = new Set();
+      const modal = document.getElementById('executor-modal');
+      const list = document.getElementById('executor-modal-list');
+
+      list.innerHTML = executors.map(name => `
+        <label class="flex items-center gap-3 p-3 rounded-xl bg-gray-800/40 border border-white/10 cursor-pointer hover:bg-gray-800">
+          <input type="checkbox" class="accent-cyan-500" onchange="window.app.toggleExecutorSelection('${name}', this.checked)">
+          <span class="font-bold text-gray-200">${name}</span>
+        </label>
+      `).join('');
+
+      modal.classList.remove('hidden');
+    };
+
+    app.closeExecutorSelectionModal = function() {
+      document.getElementById('executor-modal')?.classList.add('hidden');
+    };
+
+    app.toggleExecutorSelection = function(name, checked) {
+      if (checked) selectedExecutors.add(name);
+      else selectedExecutors.delete(name);
+    };
+
+    app.confirmExecutorSelection = function() {
+      const picked = Array.from(selectedExecutors);
+      if (picked.length === 0) {
+        alert("Selecciona al menos 1 albacea (o cambia a Pública).");
+        return;
+      }
+      app.closeExecutorSelectionModal();
+      app.finalizeCapsuleSave(picked);
+    };
+
+    app.finalizeCapsuleSave = function(execs) {
+      const record = {
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+        createdAt: new Date().toISOString(),
+        text: tempCapsuleData.text,
+        privacy: tempCapsuleData.privacy,
+        executors: tempCapsuleData.privacy === 'private' ? execs : []
+      };
+
+      capsulesData.push(record);
+
+      if (userData.plan === 'free') {
+        dailyTokens = Math.max(0, dailyTokens - 1);
+      }
+
+      app.saveDataToLocalStorage();
+
+      const input = document.getElementById('capsule-input');
+      if (input) input.value = '';
+
+      app.showToast("Tu memoria ha sido publicada en tu legado.");
+      app.updateTokenDisplay();
+    };
+
+    app.showToast = function(msg) {
+      const el = document.getElementById('confirmation-message');
+      el.textContent = msg;
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 2200);
+    };
+
+    // --- Executors CRUD ---
+    app.addExecutor = function() {
+      const name = prompt("Nombre del nuevo albacea:");
+      if (!name || !name.trim()) return;
+      const cleaned = name.trim();
+      if (executors.includes(cleaned)) return alert("Ya existe.");
+      executors.push(cleaned);
+      app.saveDataToLocalStorage();
+      app.navigateTo('executors');
+    };
+
+    app.removeExecutor = function(name) {
+      if (!confirm(`¿Eliminar a ${name}?`)) return;
+      executors = executors.filter(x => x !== name);
+      app.saveDataToLocalStorage();
+      app.navigateTo('executors');
+    };
+
+    // --- Dialogue ---
+    app.getDailyQuestions = function() {
+      const all = [
+        "¿Qué es lo que más te apasiona en este momento de tu vida?",
+        "Si pudieras darle un consejo a tu yo de hace 10 años, ¿cuál sería?",
+        "Describe un lugar donde te sientas completamente en paz.",
+        "¿Cuál es el mayor riesgo que has tomado?",
+        "¿Qué canción te transporta instantáneamente a un recuerdo feliz?",
+        "¿Hay algún sueño que dejaste ir y que a veces extrañas?",
+        "¿Qué cualidad valoras más en un amigo?",
+        "Si tuvieras un día completamente libre, sin obligaciones, ¿qué harías?",
+        "¿Cuál es un pequeño placer que te alegra el día?"
+      ];
+      const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+      const start = (dayOfYear * 3) % all.length;
+      return [all[start], all[(start + 1) % all.length], all[(start + 2) % all.length]];
+    };
+
+    app.saveDialogueAnswers = function() {
+      const a0 = document.getElementById('q0')?.value?.trim() || '';
+      const a1 = document.getElementById('q1')?.value?.trim() || '';
+      const a2 = document.getElementById('q2')?.value?.trim() || '';
+      if (!a0 || !a1 || !a2) return alert("Responde todas las preguntas.");
+
+      const today = new Date().toISOString().split('T')[0];
+      dialogueData.lastAnswered = today;
+      dialogueData.answers[today] = [a0, a1, a2];
+      userData.progress = Math.min(100, (userData.progress || 5) + 2);
+
+      app.saveDataToLocalStorage();
+      app.navigateTo('dialogue');
+    };
+
+    // --- Utils ---
+    app.escapeHTML = function(str) {
+      return String(str)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+    };
+
+    // --- Stubs (MVP) ---
+    app.toggleRecording = function() {
+      alert("MVP: grabación aún no implementada.");
+    };
+  </script>
+</body>
+</html>
 
 
 
