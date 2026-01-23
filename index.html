@@ -761,9 +761,210 @@
     app.toggleRecording = function() {
       alert("MVP: grabación aún no implementada.");
     };
-  </script>
+  <script>
+/* =========================
+   ✅ MOTOR MVP: Guardado de memorias (Públicas / Privadas para Albaceas)
+   Pegar al FINAL del script existente, antes de </script>
+========================= */
+
+(function () {
+  // --- Helpers ---
+  function nowISO() {
+    return new Date().toISOString();
+  }
+  function prettyDate(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString('es-CL', { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    } catch {
+      return iso;
+    }
+  }
+  function showToast(msg) {
+    const el = document.getElementById('confirmation-message');
+    if (!el) return;
+    el.textContent = msg || 'Tu memoria ha sido publicada en tu legado.';
+    el.classList.remove('hidden');
+    clearTimeout(window.__evokaToastT);
+    window.__evokaToastT = setTimeout(() => el.classList.add('hidden'), 2200);
+  }
+  function requireTokensOrBlock() {
+    // Solo FREE se bloquea por tokens
+    if ((userData?.plan || 'free') !== 'free') return true;
+    if (dailyTokens > 0) return true;
+
+    showToast('Sin tokens por hoy. Vuelve mañana o mejora tu plan.');
+    app.updateTokenDisplay();
+    return false;
+  }
+  function consumeTokenIfNeeded() {
+    if ((userData?.plan || 'free') === 'free') {
+      dailyTokens = Math.max(0, (dailyTokens || 0) - 1);
+    }
+  }
+
+  // --- Modal (Privada -> elegir albaceas) ---
+  app.openExecutorSelectionModal = function () {
+    // Si no hay albaceas, no puedes guardar privada (por ahora)
+    if (!Array.isArray(executors) || executors.length === 0) {
+      showToast('No tienes albaceas. Agrega uno antes de guardar privado.');
+      return;
+    }
+
+    // Si ya existe, bórralo y recrea (evita duplicados)
+    const old = document.getElementById('executor-modal');
+    if (old) old.remove();
+
+    const options = executors.map((name, idx) => `
+      <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 cursor-pointer">
+        <input type="checkbox" class="h-4 w-4 accent-cyan-500" data-executor="${name}">
+        <span class="text-gray-200">${name}</span>
+      </label>
+    `).join('');
+
+    const modal = document.createElement('div');
+    modal.id = 'executor-modal';
+    modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4';
+    modal.innerHTML = `
+      <div class="w-full max-w-lg bg-[#1e1f20] rounded-2xl shadow-xl border border-gray-700">
+        <div class="p-5 border-b border-gray-700 flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-bold text-white">Selecciona albaceas</h3>
+            <p class="text-sm text-gray-400">Esta memoria será privada y visible solo para los albaceas seleccionados.</p>
+          </div>
+          <button class="text-gray-400 hover:text-white text-2xl leading-none" id="executor-modal-close">&times;</button>
+        </div>
+
+        <div class="p-5 space-y-2 max-h-[45vh] overflow-y-auto">
+          ${options}
+        </div>
+
+        <div class="p-5 border-t border-gray-700 flex gap-3">
+          <button id="executor-modal-cancel" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 rounded-xl">Cancelar</button>
+          <button id="executor-modal-save" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-3 rounded-xl">Guardar privada</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const close = () => modal.remove();
+    modal.querySelector('#executor-modal-close').onclick = close;
+    modal.querySelector('#executor-modal-cancel').onclick = close;
+
+    modal.querySelector('#executor-modal-save').onclick = () => {
+      const checked = Array.from(modal.querySelectorAll('input[type="checkbox"]'))
+        .filter(i => i.checked)
+        .map(i => i.getAttribute('data-executor'));
+
+      if (checked.length === 0) {
+        showToast('Selecciona al menos 1 albacea.');
+        return;
+      }
+
+      app.finalizeCapsuleSave('Privada', checked);
+      close();
+    };
+  };
+
+  // --- Finalizar guardado (Publica o Privada) ---
+  app.finalizeCapsuleSave = function (privacyLabel, allowedExecutors) {
+    if (!requireTokensOrBlock()) return;
+
+    const text = (tempCapsuleData?.text || '').trim();
+    const privacy = (tempCapsuleData?.privacy || 'private');
+
+    if (!text) {
+      showToast('No hay texto para guardar.');
+      return;
+    }
+
+    const capsule = {
+      id: `cap_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+      createdAt: nowISO(),
+      text,
+      privacy, // 'public' o 'private'
+      allowedExecutors: Array.isArray(allowedExecutors) ? allowedExecutors : [],
+      author: userData?.fullName || 'Usuario',
+    };
+
+    capsulesData = Array.isArray(capsulesData) ? capsulesData : [];
+    capsulesData.unshift(capsule);
+
+    consumeTokenIfNeeded();
+    app.saveDataToLocalStorage();
+    tempCapsuleData = {};
+
+    // Reset input
+    const input = document.getElementById('capsule-input');
+    if (input) input.value = '';
+
+    app.updateTokenDisplay();
+    showToast(privacy === 'public' ? 'Memoria pública guardada.' : 'Memoria privada guardada para albaceas.');
+
+    // Si estás en Memorias, refresca
+    const current = document.querySelector('#side-nav a.bg-gray-700')?.getAttribute('data-page');
+    if (current === 'memories') app.navigateTo('memories');
+  };
+
+  // --- Toggle recording (placeholder MVP) ---
+  app.toggleRecording = function () {
+    // MVP: solo aviso. Si quieres grabación real, hay que usar MediaRecorder.
+    showToast('Audio aún no implementado en MVP.');
+  };
+
+  // --- Albaceas CRUD ---
+  app.addExecutor = function () {
+    const name = prompt('Nombre del nuevo albacea (ej: Gisselle):');
+    if (!name || !name.trim()) return;
+    const clean = name.trim();
+
+    executors = Array.isArray(executors) ? executors : [];
+    if (executors.includes(clean)) {
+      showToast('Ese albacea ya existe.');
+      return;
+    }
+    executors.push(clean);
+    app.saveDataToLocalStorage();
+    app.navigateTo('executors');
+    showToast('Albacea agregado.');
+  };
+
+  app.removeExecutor = function (btn, name) {
+    if (!confirm(`¿Eliminar a "${name}" como albacea?`)) return;
+    executors = (executors || []).filter(e => e !== name);
+    app.saveDataToLocalStorage();
+    app.navigateTo('executors');
+    showToast('Albacea eliminado.');
+  };
+
+  // --- Vista Memorias (listado) ---
+  app.getMemoriesViewHTML = function () {
+    capsulesData = Array.isArray(capsulesData) ? capsulesData : [];
+
+    if (capsulesData.length === 0) {
+      return `
+        <section class="fade-in">
+          <h2 class="text-3xl font-bold mb-2 text-white">Memorias</h2>
+          <p class="text-gray-400 mb-6">Aquí verás todo lo que guardes.</p>
+          <div class="bg-[#1e1f20] rounded-xl p-6 text-gray-300">
+            Aún no hay memorias. Escribe una cápsula en Inicio y publícala.
+          </div>
+        </section>
+      `;
+    }
+
+    const cards = capsulesData.map(c => {
+      const isPublic = c.privacy === 'public';
+      const badge = isPublic
+        ? `<span class="text-xs font-bold px-2 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Pública</span>`
+        : `<span class="text-xs font-bold px-2 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Privada</span>`;
+
+      const exec = (!isPublic && Array.isArray(c.allowedExecutors) && c.allowedExecutors
+</script>
 </body>
 </html>
+
 
 
 
