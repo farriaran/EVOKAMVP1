@@ -24,12 +24,7 @@
     #nav-rail:hover .nav-text { opacity: 1; width: auto; margin-left: 1rem; }
 
     .modal-backdrop { background: rgba(0,0,0,0.6); }
-  </style>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-});
-
-  
+  </style> 
 </script>
 
   
@@ -896,8 +891,33 @@
       `).join('');
     };
 
-      <script>
     app.claimDedicated = function(dedId) {
+      const item = (dedicatedIndex || []).find(x => x.id === dedId);
+      if (!item) return alert("No se encontró esa memoria.");
+
+      const claimant = userData?.username || '@guest';
+
+      const exists = (claimsData || []).some(c =>
+        c.dedId === dedId &&
+        c.claimantUsername === claimant &&
+        c.status === 'pending'
+      );
+      if (exists) return alert("Ya tienes una solicitud pendiente para esta dedicada.");
+
+      const claim = {
+        id: 'clm_' + Math.random().toString(36).slice(2, 10),
+        dedId: dedId,
+        claimantUsername: claimant,
+        createdAt: Date.now(),
+        status: 'pending'
+      };
+
+      claimsData.unshift(claim);
+      item.status = 'claimed';
+      app.saveDataToLocalStorage();
+      alert("Solicitud enviada. Falta aprobación del autor (demo).");
+      app.runDiscoverySearch();
+    };
       const item = (dedicatedIndex || []).find(x => x.id === dedId);
       if (!item) return alert("No se encontró esa memoria.");
 
@@ -968,3 +988,4 @@
 
 </body>
 </html>
+
