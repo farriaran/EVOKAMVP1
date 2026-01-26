@@ -896,18 +896,75 @@
       `).join('');
     };
 
+      <script>
     app.claimDedicated = function(dedId) {
       const item = (dedicatedIndex || []).find(x => x.id === dedId);
       if (!item) return alert("No se encontró esa memoria.");
 
       const claimant = userData?.username || '@guest';
 
-      const exists = (claimsData || []).some(c => c.dedId === dedId && c.claimantUsername === claimant && c.status === 'pending');
+      const exists = (claimsData || []).some(c =>
+        c.dedId === dedId &&
+        c.claimantUsername === claimant &&
+        c.status === 'pending'
+      );
       if (exists) return alert("Ya tienes una solicitud pendiente para esta dedicada.");
 
       const claim = {
         id: 'clm_' + Math.random().toString(36).slice(2, 10),
-        dedId:
+        dedId: dedId,
+        claimantUsername: claimant,
+        createdAt: Date.now(),
+        status: 'pending' // pending | approved | rejected
+      };
 
+      claimsData.unshift(claim);
+      item.status = 'claimed';
+      app.saveDataToLocalStorage();
+      alert("Solicitud enviada. Falta aprobación del autor (demo).");
+      app.runDiscoverySearch();
+    };
 
+    // -------- STUBS mínimos para que no reviente la app --------
+    app.getClaimsViewHTML = function() {
+      return `
+        <section class="fade-in">
+          <h2 class="text-3xl font-bold mb-4 text-white">Solicitudes</h2>
+          <div class="bg-[#1e1f20] border border-gray-800 rounded-2xl p-6 text-gray-300">
+            Vista en construcción. (Pero ya no te deja la app en negro 😄)
+          </div>
+        </section>
+      `;
+    };
 
+    app.showToast = function(message) {
+      const el = document.getElementById('confirmation-message');
+      if (!el) return;
+      el.textContent = message || 'Listo';
+      el.classList.remove('hidden');
+      setTimeout(() => el.classList.add('hidden'), 1800);
+    };
+
+    app.escapeHTML = function(str) {
+      return String(str ?? '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    };
+
+    app.clearAllMemories = function() {
+      if (!confirm('¿Borrar todo?')) return;
+      capsulesData = [];
+      app.saveDataToLocalStorage();
+      app.navigateTo('memories');
+    };
+
+    app.toggleRecording = function() {
+      alert('Grabación (demo) aún no implementada.');
+    };
+</script>
+
+</body>
+</html>
