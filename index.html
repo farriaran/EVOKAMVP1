@@ -7,12 +7,6 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
 
-  // --- BOOTSTRAP APP ---
-document.addEventListener('DOMContentLoaded', () => {
-  app.navigateTo('home');
-});
-
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -31,6 +25,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     .modal-backdrop { background: rgba(0,0,0,0.6); }
   </style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    app.navigateTo('home');
+  });
+</script>
+
+  
 </head>
 
 <body class="bg-[#131314] text-gray-200 antialiased flex">
@@ -906,4 +907,5 @@ document.addEventListener('DOMContentLoaded', () => {
       const claim = {
         id: 'clm_' + Math.random().toString(36).slice(2, 10),
         dedId:
+
 
