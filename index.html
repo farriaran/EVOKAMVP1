@@ -29,6 +29,8 @@
 
 <body class="bg-[#131314] text-gray-200 antialiased flex">
 
+  <!-- APP:ROOT -->
+
   <!-- Barra de Navegación Lateral -->
   <aside id="nav-rail" class="bg-[#1e1f20] h-screen p-4 flex flex-col items-center space-y-6 w-20 hover:w-64 transition-all duration-300 ease-in-out group">
     <div class="w-16 mb-4">
@@ -129,6 +131,7 @@
     // ----------------------------
     // Local Storage
     // ----------------------------
+    /* APP:LOGIC */
     app.saveDataToLocalStorage = function() {
       localStorage.setItem('evokaUserData', JSON.stringify(userData));
       localStorage.setItem('evokaCapsules', JSON.stringify(capsulesData));
@@ -216,6 +219,7 @@
       }
     }
 
+    /* APP:VIEWS */
     app.getHomeViewHTML = function() {
       return `
         <div class="flex-grow flex items-center justify-center text-center">
@@ -703,7 +707,7 @@
     // Executors (Albaceas)
     // ----------------------------
     app.addExecutor = function() {
-      const name = prompt("Nombre del albacea (ej: Sebastián Carrasco):");
+      const name = prompt("Nombre del albacea (ej: Sebasti��n Carrasco):");
       if (!name || name.trim() === '') return;
 
       const clean = name.trim();
@@ -896,5 +900,3 @@
       const claim = {
         id: 'clm_' + Math.random().toString(36).slice(2, 10),
         dedId:
-
-
