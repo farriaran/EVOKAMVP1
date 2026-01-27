@@ -105,7 +105,7 @@ app.navigateTo = function(page) {
   } else if (page === 'claims') {
     mainContent.innerHTML = app.getClaimsViewHTML();
     actionBar.innerHTML = '';
-    } else {
+  } else {
     mainContent.innerHTML = `<div class="flex-grow flex items-center justify-center text-center p-4">
       <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
         Página de ${page} en construcción.
@@ -114,6 +114,7 @@ app.navigateTo = function(page) {
   }
 };
 
+app.getMemoriesStats = function() {
   const list = Array.isArray(capsulesData) ? capsulesData : [];
   let total = list.length;
   let pub = 0;
@@ -127,7 +128,6 @@ app.navigateTo = function(page) {
 
   return { total, public: pub, private: priv };
 };
-
 
 /* APP:VIEWS */
 app.getHomeViewHTML = function() {
@@ -193,6 +193,52 @@ app.getHomeActionBarHTML = function() {
   `;
 };
 
-/* ...rest of functions unchanged (kept exactly as in previous extraction) ... */
+app.getDialogueViewHTML = function() {
+  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Diálogo</h2></div>`;
+};
 
-/* Important: The corrupted string "Sebasti��n" was replaced with the correct "Sebastián" in the addExecutor prompt and seed samples. The rest of the logic, function names, IDs and behavior were left untouched. */
+app.getExecutorsViewHTML = function() {
+  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Ejecutores</h2></div>`;
+};
+
+app.getPlansViewHTML = function() {
+  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Planes</h2></div>`;
+};
+
+app.getMemoriesViewHTML = function() {
+  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Memorias</h2></div>`;
+};
+
+app.getDiscoverViewHTML = function() {
+  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Descubrir</h2></div>`;
+};
+
+app.getClaimsViewHTML = function() {
+  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Reclamos</h2></div>`;
+};
+
+app.loadStaticUI = function() {
+  // Placeholder
+};
+
+app.updateTokenDisplay = function() {
+  // Placeholder
+};
+
+app.togglePrivacy = function(btn) {
+  // Placeholder
+};
+
+app.toggleRecording = function() {
+  // Placeholder
+};
+
+app.saveCapsule = function() {
+  // Placeholder
+};
+
+app.escapeHTML = function(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+};
