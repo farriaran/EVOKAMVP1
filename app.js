@@ -105,14 +105,15 @@ app.navigateTo = function(page) {
   } else if (page === 'claims') {
     mainContent.innerHTML = app.getClaimsViewHTML();
     actionBar.innerHTML = '';
-  } else {
+    } else {
     mainContent.innerHTML = `<div class="flex-grow flex items-center justify-center text-center p-4">
       <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
         Página de ${page} en construcción.
       </h1></div>`;
     actionBar.innerHTML = '';
-  };
-app.getMemoriesStats = function() {
+  }
+};
+
   const list = Array.isArray(capsulesData) ? capsulesData : [];
   let total = list.length;
   let pub = 0;
