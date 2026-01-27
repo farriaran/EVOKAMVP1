@@ -111,7 +111,22 @@ app.navigateTo = function(page) {
         Página de ${page} en construcción.
       </h1></div>`;
     actionBar.innerHTML = '';
+  };
+app.getMemoriesStats = function() {
+  const list = Array.isArray(capsulesData) ? capsulesData : [];
+  let total = list.length;
+  let pub = 0;
+  let priv = 0;
+
+  for (let i = 0; i < list.length; i++) {
+    const p = (list[i] && list[i].privacy) || 'private';
+    if (p === 'public') pub++;
+    else priv++;
   }
+
+  return { total, public: pub, private: priv };
+};
+
 
 /* APP:VIEWS */
 app.getHomeViewHTML = function() {
