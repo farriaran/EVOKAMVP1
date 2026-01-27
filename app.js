@@ -206,7 +206,25 @@ app.getPlansViewHTML = function() {
 };
 
 app.getMemoriesViewHTML = function() {
-  return `<div class="p-4"><h2 class="text-2xl font-bold text-white">Memorias</h2></div>`;
+  const list = Array.isArray(capsulesData) ? capsulesData : [];
+  if (list.length === 0) {
+    return `<div class="p-4 text-center text-gray-400">Aún no hay memorias.</div>`;
+  }
+  let html = '<div class="p-4 space-y-3">';
+  for (let i = list.length - 1; i >= 0; i--) {
+    const c = list[i];
+    const date = c.createdAt ? new Date(c.createdAt).toLocaleDateString() : '';
+    const privacy = c.privacy === 'public' ? 'Pública' : 'Privada';
+    const text = app.escapeHTML(c.text || '');
+    html += `
+      <div class="bg-gray-800 p-3 rounded-lg">
+        <div class="text-xs text-gray-400 mb-1">${date} · ${privacy}</div>
+        <div class="text-gray-200">${text}</div>
+      </div>
+    `;
+  }
+  html += '</div>';
+  return html;
 };
 
 app.getDiscoverViewHTML = function() {
@@ -226,7 +244,13 @@ app.updateTokenDisplay = function() {
 };
 
 app.togglePrivacy = function(btn) {
-  // Placeholder
+  const current = btn.getAttribute('data-privacy') || 'private';
+  const next = current === 'private' ? 'public' : 'private';
+  btn.setAttribute('data-privacy', next);
+  const span = btn.querySelector('span');
+  if (span) {
+    span.textContent = next === 'private' ? 'Privada' : 'Pública';
+  }
 };
 
 app.toggleRecording = function() {
@@ -234,7 +258,29 @@ app.toggleRecording = function() {
 };
 
 app.saveCapsule = function() {
-  // Placeholder
+  const input = document.getElementById('capsule-input');
+  const text = input ? input.value.trim() : '';
+  if (!text) return;
+  const toggle = document.getElementById('privacy-toggle');
+  const privacy = toggle ? toggle.getAttribute('data-privacy') || 'private' : 'private';
+  const capsule = {
+    id: Date.now().toString(),
+    text: text,
+    privacy: privacy,
+    createdAt: new Date().toISOString()
+  };
+  capsulesData.push(capsule);
+  app.saveDataToLocalStorage();
+  input.value = '';
+  const totalEl = document.getElementById('mem-stats-total');
+  const publicEl = document.getElementById('mem-stats-public');
+  const privateEl = document.getElementById('mem-stats-private');
+  if (totalEl || publicEl || privateEl) {
+    const stats = app.getMemoriesStats();
+    if (totalEl) totalEl.textContent = stats.total;
+    if (publicEl) publicEl.textContent = stats.public;
+    if (privateEl) privateEl.textContent = stats.private;
+  }
 };
 
 app.escapeHTML = function(str) {
