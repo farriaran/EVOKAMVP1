@@ -118,11 +118,13 @@ app.getMemoriesStats = function() {
   let total = list.length;
   let pub = 0;
   let priv = 0;
+
   for (let i = 0; i < list.length; i++) {
     const p = (list[i] && list[i].privacy) || 'private';
     if (p === 'public') pub++;
     else priv++;
   }
+
   return { total, public: pub, private: priv };
 };
 
@@ -146,8 +148,6 @@ app.getHomeViewHTML = function() {
     </div>
   `;
 };
-
-}
 
 app.getHomeActionBarHTML = function() {
   return `
@@ -190,7 +190,7 @@ app.getHomeActionBarHTML = function() {
       </div>
     </div>
   `;
-}
+};
 
 /* ...rest of functions unchanged (kept exactly as in previous extraction) ... */
 
