@@ -113,9 +113,22 @@ app.navigateTo = function(page) {
     actionBar.innerHTML = '';
   }
 }
+app.getMemoriesStats = function() {
+  const list = Array.isArray(capsulesData) ? capsulesData : [];
+  let total = list.length;
+  let pub = 0;
+  let priv = 0;
+  for (let i = 0; i < list.length; i++) {
+    const p = (list[i] && list[i].privacy) || 'private';
+    if (p === 'public') pub++;
+    else priv++;
+  }
+  return { total, public: pub, private: priv };
+};
 
 /* APP:VIEWS */
 app.getHomeViewHTML = function() {
+  const stats = app.getMemoriesStats();
   return `
     <div class="flex-grow flex items-center justify-center text-center">
       <div>
@@ -123,9 +136,17 @@ app.getHomeViewHTML = function() {
           Hola ${app.escapeHTML((userData.fullName || ''))}
         </h1>
         <p class="text-gray-400 mt-2">¿Qué recuerdo quieres evocar hoy?</p>
+
+        <div class="mt-4">
+          <div>Total memorias: <span id="mem-stats-total">${stats.total}</span></div>
+          <div>Públicas: <span id="mem-stats-public">${stats.public}</span></div>
+          <div>Privadas: <span id="mem-stats-private">${stats.private}</span></div>
+        </div>
       </div>
     </div>
   `;
+};
+
 }
 
 app.getHomeActionBarHTML = function() {
