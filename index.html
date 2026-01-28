@@ -4,34 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EVOKA MVP1</title>
-
   <link rel="stylesheet" href="./styles.css" />
 </head>
-<body>
 
+<body>
   <div class="app-container">
+    <div id="overlay" class="sidebar-overlay"></div>
+
     <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
       <div class="sidebar-header">
-        <img class="sidebar-logo" src="./assets/logo.svg" alt="EVOKA" onerror="this.style.display='none'">
-        <div>
-          <div class="brand-name">EVOKA</div>
-          <div class="brand-tag">MVP1</div>
+        <div class="brand">
+          <img class="sidebar-logo" src="./assets/logo.svg" alt="EVOKA" onerror="this.style.display='none'">
+          <div class="brand-text">
+            <div class="brand-name">EVOKA</div>
+            <div class="brand-tag">MVP1</div>
+          </div>
         </div>
+
+        <button id="collapse-toggle" class="collapse-toggle" type="button" aria-label="Comprimir sidebar">
+          <span class="collapse-icon" aria-hidden="true"></span>
+        </button>
       </div>
 
       <nav class="sidebar-nav" aria-label="Navegación">
         <a class="nav-item nav-item-active" href="#home" data-route="home">
-          <span class="nav-icon">🏠</span><span>Inicio</span>
+          <span class="nav-bullet"></span><span class="nav-label">Inicio</span>
         </a>
         <a class="nav-item" href="#memories" data-route="memories">
-          <span class="nav-icon">📘</span><span>Memorias</span>
+          <span class="nav-bullet"></span><span class="nav-label">Memorias</span>
         </a>
         <a class="nav-item" href="#new" data-route="new">
-          <span class="nav-icon">➕</span><span>Nueva memoria</span>
+          <span class="nav-bullet"></span><span class="nav-label">Nueva memoria</span>
         </a>
         <a class="nav-item" href="#settings" data-route="settings">
-          <span class="nav-icon">⚙️</span><span>Settings</span>
+          <span class="nav-bullet"></span><span class="nav-label">Settings</span>
         </a>
       </nav>
 
@@ -45,12 +52,15 @@
     <!-- Main -->
     <main class="main-content">
       <header class="top-bar">
-        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Abrir/cerrar menú">☰</button>
+        <button id="sidebar-toggle" class="icon-button" type="button" aria-label="Abrir/cerrar menú">
+          <span class="hamburger" aria-hidden="true"></span>
+        </button>
+
         <div class="top-bar-title" id="topBarTitle">Inicio</div>
 
         <div class="profile-menu-container">
           <button id="profile-button" class="profile-button" type="button">
-            <span>Perfil</span> <span>▾</span>
+            Perfil <span class="caret" aria-hidden="true"></span>
           </button>
 
           <div id="profile-menu" class="profile-menu hidden" role="menu" aria-label="Perfil">
@@ -61,9 +71,7 @@
         </div>
       </header>
 
-      <section class="content-area" id="contentArea">
-        <!-- Render por JS -->
-      </section>
+      <section class="content-area" id="contentArea"></section>
     </main>
   </div>
 
