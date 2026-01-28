@@ -27,6 +27,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+  app.loadDataFromLocalStorage();
+  app.loadTheme();
+  app.loadStaticUI();
+  app.navigateTo('home');
+
+  // Sidebar toggle
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    sidebar.classList.toggle('collapsed');
+    overlay.classList.toggle('active');
+  });
+
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    sidebar.classList.remove('collapsed');
+    overlay.classList.remove('active');
+  });
+
+  // Profile menu
+  window.addEventListener('click', function(e) {
+    const profileButton = document.getElementById('profile-button');
+    const profileMenu = document.getElementById('profile-menu');
+    if (profileButton && !profileButton.contains(e.target) && profileMenu && !profileMenu.contains(e.target)) {
+      profileMenu.classList.add('hidden');
+    }
+  });
+});
 app.loadTheme = function() {
   const savedTheme = localStorage.getItem('evokaTheme');
   if (savedTheme === 'light' || savedTheme === 'dark') {
