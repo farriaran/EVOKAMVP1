@@ -8,75 +8,118 @@
 </head>
 
 <body>
-  <div class="app-container">
-    <div id="overlay" class="sidebar-overlay"></div>
-
+  <div class="app">
     <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar">
-      <div class="sidebar-header">
+    <aside class="sidebar" aria-label="Navegación">
+      <div class="sidebar-top">
         <div class="brand">
-          <img class="sidebar-logo" src="./assets/logo.svg" alt="EVOKA" onerror="this.style.display='none'">
-          <div class="brand-text">
-            <div class="brand-name">EVOKA</div>
-            <div class="brand-tag">MVP1</div>
-          </div>
+          <div class="brand-dot"></div>
+          <div class="brand-text">EVOKA</div>
         </div>
 
-        <button id="collapse-toggle" class="collapse-toggle" type="button" aria-label="Comprimir sidebar">
-          <span class="collapse-icon" aria-hidden="true"></span>
-        </button>
+        <nav class="nav">
+          <button class="nav-btn active" data-route="home" aria-label="Inicio">
+            <!-- Home icon -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 3 2.5 11.2a1 1 0 0 0 .7 1.8H5v8a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-8h1.8a1 1 0 0 0 .7-1.8L12 3z"/>
+            </svg>
+          </button>
+
+          <button class="nav-btn" data-route="chat" aria-label="Diálogo">
+            <!-- Chat bubble -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4.2 3.1A1 1 0 0 1 3 19.3V6a2 2 0 0 1 1-2z"/>
+            </svg>
+          </button>
+
+          <button class="nav-btn" data-route="calendar" aria-label="Calendario">
+            <!-- Calendar -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1zm13 9H4v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9z"/>
+            </svg>
+          </button>
+
+          <button class="nav-btn" data-route="vault" aria-label="Privado">
+            <!-- Lock -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V8a3 3 0 0 0-6 0v2z"/>
+            </svg>
+          </button>
+
+          <button class="nav-btn" data-route="settings" aria-label="Settings">
+            <!-- Sliders -->
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h10a2 2 0 1 0 0-2H4a1 1 0 1 0 0 2zm0 12h6a2 2 0 1 0 0-2H4a1 1 0 1 0 0 2zm0-6h14a2 2 0 1 0 0-2H4a1 1 0 1 0 0 2z"/>
+            </svg>
+          </button>
+        </nav>
       </div>
 
-      <nav class="sidebar-nav" aria-label="Navegación">
-        <a class="nav-item nav-item-active" href="#home" data-route="home">
-          <span class="nav-bullet"></span><span class="nav-label">Inicio</span>
-        </a>
-        <a class="nav-item" href="#memories" data-route="memories">
-          <span class="nav-bullet"></span><span class="nav-label">Memorias</span>
-        </a>
-        <a class="nav-item" href="#new" data-route="new">
-          <span class="nav-bullet"></span><span class="nav-label">Nueva memoria</span>
-        </a>
-        <a class="nav-item" href="#settings" data-route="settings">
-          <span class="nav-bullet"></span><span class="nav-label">Settings</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="footer-text">
-          <span id="memoryCounter">0</span> memorias guardadas
-        </div>
+      <div class="sidebar-bottom">
+        <div class="sidebar-spacer"></div>
       </div>
     </aside>
 
     <!-- Main -->
-    <main class="main-content">
-      <header class="top-bar">
-        <button id="sidebar-toggle" class="icon-button" type="button" aria-label="Abrir/cerrar menú">
-          <span class="hamburger" aria-hidden="true"></span>
-        </button>
-
-        <div class="top-bar-title" id="topBarTitle">Inicio</div>
-
-        <div class="profile-menu-container">
-          <button id="profile-button" class="profile-button" type="button">
-            Perfil <span class="caret" aria-hidden="true"></span>
-          </button>
-
-          <div id="profile-menu" class="profile-menu hidden" role="menu" aria-label="Perfil">
-            <button class="profile-menu-item" type="button" id="themeToggle">Cambiar tema</button>
-            <div class="profile-menu-divider"></div>
-            <button class="profile-menu-item danger" type="button" id="resetData">Reset datos</button>
+    <main class="main">
+      <!-- Top-right user widget -->
+      <div class="user-widget" aria-label="Usuario">
+        <div class="avatar">F</div>
+        <div class="plan">
+          <div class="plan-name">FREE</div>
+          <div class="plan-meta">
+            <span class="meta-dot"></span>
+            <span id="capsuleCount">0</span>
           </div>
         </div>
-      </header>
+      </div>
 
-      <section class="content-area" id="contentArea"></section>
+      <!-- Center hero -->
+      <section class="hero" id="view">
+        <h1 class="hero-title">Hola Felipe</h1>
+        <p class="hero-subtitle">¿Qué recuerdo quieres evocar hoy?</p>
+      </section>
+
+      <!-- Bottom composer -->
+      <footer class="composer">
+        <div class="composer-card">
+          <div class="composer-head">
+            <div class="composer-left">
+              <span class="lock">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V8a3 3 0 0 0-6 0v2z"/>
+                </svg>
+                Privada
+              </span>
+            </div>
+            <div class="composer-right">MVP</div>
+          </div>
+
+          <div class="composer-body">
+            <textarea id="prompt" class="prompt" rows="1" placeholder="Vuelve mañana para más cápsulas."></textarea>
+
+            <div class="composer-actions">
+              <button id="micBtn" class="icon-btn" type="button" aria-label="Micrófono">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm7-3a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.08A7 7 0 0 0 19 11z"/>
+                </svg>
+              </button>
+
+              <button id="sendBtn" class="send-btn" type="button" aria-label="Enviar">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3a1 1 0 0 1 1 1v12.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4L11 16.6V4a1 1 0 0 1 1-1z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   </div>
 
   <script src="./app.js"></script>
 </body>
 </html>
+
 
 
