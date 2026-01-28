@@ -5,14 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EVOKA MVP</title>
 
-  <!-- Tailwind CDN (para que tus clases tipo flex, p-4, text-2xl funcionen) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* ============================
-       EVOKA Theme System (Dark/Light)
-       ============================ */
-
     :root[data-theme="dark"] {
       --evoka-bg: #0a0b0d;
       --evoka-surface: #1e1f20;
@@ -37,17 +32,12 @@
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    /* Helpers usados por tu JS */
-    .bg-surface { background-color: var(--evoka-surface); }
-    .border-border { border-color: var(--evoka-border); }
-    .text-text-primary { color: var(--evoka-text); }
-    .text-text-secondary { color: var(--evoka-text-muted); }
+    .evoka-surface { background-color: var(--evoka-surface); }
+    .evoka-border { border: 1px solid var(--evoka-border); }
+    .evoka-text { color: var(--evoka-text); }
+    .evoka-text-muted { color: var(--evoka-text-muted); }
+    .evoka-hover:hover { background-color: var(--evoka-hover); }
 
-    /* para usar hover:bg-hover (tailwind-like) */
-    .bg-hover { background-color: var(--evoka-hover); }
-    .hover\:bg-hover:hover { background-color: var(--evoka-hover); }
-
-    /* Scrollbar suave (opcional) */
     * { scrollbar-color: var(--evoka-border) transparent; }
   </style>
 </head>
@@ -56,24 +46,24 @@
   <div class="flex min-h-screen">
 
     <!-- SIDEBAR -->
-    <aside class="w-64 bg-surface border-r border-border hidden md:flex flex-col">
-      <div class="p-4 border-b border-border">
-        <div class="text-lg font-bold text-text-primary">EVOKA</div>
-        <div class="text-xs text-text-secondary">MVP1</div>
+    <aside class="w-64 evoka-surface border-r evoka-border flex flex-col">
+      <div class="p-4 border-b evoka-border">
+        <div class="text-lg font-bold evoka-text">EVOKA</div>
+        <div class="text-xs evoka-text-muted">MVP1</div>
       </div>
 
       <nav id="side-nav" class="p-3 flex-1 space-y-1">
-        <a href="#" data-page="home" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Home</a>
-        <a href="#" data-page="memories" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Memorias</a>
-        <a href="#" data-page="dialogue" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Diálogo</a>
-        <a href="#" data-page="executors" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Ejecutores</a>
-        <a href="#" data-page="discover" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Descubrir</a>
-        <a href="#" data-page="claims" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Reclamos</a>
-        <a href="#" data-page="plans" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Planes</a>
-        <a href="#" data-page="settings" class="block px-3 py-2 rounded text-sm text-text-secondary hover:bg-hover hover:text-text-primary">Configuración</a>
+        <a href="#" data-page="home" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Home</a>
+        <a href="#" data-page="memories" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Memorias</a>
+        <a href="#" data-page="dialogue" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Diálogo</a>
+        <a href="#" data-page="executors" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Ejecutores</a>
+        <a href="#" data-page="discover" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Descubrir</a>
+        <a href="#" data-page="claims" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Reclamos</a>
+        <a href="#" data-page="plans" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Planes</a>
+        <a href="#" data-page="settings" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Configuración</a>
       </nav>
 
-      <div class="p-3 border-t border-border text-xs text-text-secondary">
+      <div class="p-3 border-t evoka-border text-xs evoka-text-muted">
         © EVOKA
       </div>
     </aside>
@@ -82,31 +72,24 @@
     <main class="flex-1 flex flex-col">
 
       <!-- TOP BAR -->
-      <header class="h-14 flex items-center justify-between px-4 border-b border-border bg-surface">
-        <div class="flex items-center gap-2 md:hidden">
-          <button id="mobile-menu-btn" class="px-3 py-1 rounded border border-border text-text-secondary hover:bg-hover">
-            ☰
-          </button>
-          <div class="font-semibold text-text-primary">EVOKA</div>
-        </div>
-
-        <div class="hidden md:block text-sm text-text-secondary">
+      <header class="h-14 flex items-center justify-between px-4 border-b evoka-border evoka-surface">
+        <div class="text-sm evoka-text-muted">
           Evoka MVP — recuerdos, cápsulas, legado.
         </div>
 
         <div class="relative">
           <button id="profile-button" onclick="window.app.toggleProfileMenu()"
-                  class="px-3 py-2 rounded border border-border text-sm text-text-secondary hover:bg-hover">
+                  class="px-3 py-2 rounded evoka-border text-sm evoka-text-muted evoka-hover">
             Perfil ▾
           </button>
 
           <div id="profile-menu"
-               class="hidden absolute right-0 mt-2 w-44 bg-surface border border-border rounded-lg shadow-lg overflow-hidden z-50">
-            <a href="#" data-page="settings" class="block px-4 py-2 text-sm text-text-secondary hover:bg-hover">Configuración</a>
-            <a href="#" data-page="memories" class="block px-4 py-2 text-sm text-text-secondary hover:bg-hover">Memorias</a>
-            <div class="border-t border-border"></div>
-            <button onclick="window.app.toggleTheme()"
-                    class="w-full text-left px-4 py-2 text-sm text-text-secondary hover:bg-hover">
+               class="hidden absolute right-0 mt-2 w-44 evoka-surface evoka-border rounded-lg shadow-lg overflow-hidden z-50">
+            <a href="#" onclick="event.preventDefault(); window.app.navigateTo('settings')" class="block px-4 py-2 text-sm evoka-text-muted evoka-hover">Configuración</a>
+            <a href="#" onclick="event.preventDefault(); window.app.navigateTo('memories')" class="block px-4 py-2 text-sm evoka-text-muted evoka-hover">Memorias</a>
+            <div class="border-t evoka-border"></div>
+            <button onclick="window.app.setTheme(window.app.theme === 'dark' ? 'light' : 'dark')"
+                    class="w-full text-left px-4 py-2 text-sm evoka-text-muted evoka-hover">
               Cambiar tema
             </button>
           </div>
@@ -124,19 +107,6 @@
     </main>
   </div>
 
-  <script>
-    // Menú mobile (simple)
-    document.addEventListener("click", (e) => {
-      const btn = document.getElementById("mobile-menu-btn");
-      const aside = document.querySelector("aside");
-      if (btn && e.target === btn && aside) {
-        aside.classList.toggle("hidden");
-      }
-    });
-  </script>
-
-  <!-- Tu app -->
-  <script src="./app.js" defer></script>
+  <script src="./app.js"></script>
 </body>
 </html>
-
