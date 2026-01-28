@@ -1,117 +1,316 @@
-<!doctype html>
-<html lang="es" data-theme="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>EVOKA MVP</title>
+:root[data-theme="dark"] {
+  --evoka-bg: #0a0b0d;
+  --evoka-surface: #1e1f20;
+  --evoka-border: #2d2e30;
+  --evoka-text: #e5e7eb;
+  --evoka-text-muted: #9ca3af;
+  --evoka-hover: rgba(255, 255, 255, 0.06);
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+}
 
-  <script src="https://cdn.tailwindcss.com"></script>
+:root[data-theme="light"] {
+  --evoka-bg: #ffffff;
+  --evoka-surface: #f9fafb;
+  --evoka-border: #e5e7eb;
+  --evoka-text: #111827;
+  --evoka-text-muted: #6b7280;
+  --evoka-hover: rgba(0, 0, 0, 0.04);
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+}
 
-  <style>
-    :root[data-theme="dark"] {
-      --evoka-bg: #0a0b0d;
-      --evoka-surface: #1e1f20;
-      --evoka-border: #2d2e30;
-      --evoka-text: #e5e7eb;
-      --evoka-text-muted: #9ca3af;
-      --evoka-hover: rgba(255, 255, 255, 0.06);
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    :root[data-theme="light"] {
-      --evoka-bg: #ffffff;
-      --evoka-surface: #f9fafb;
-      --evoka-border: #e5e7eb;
-      --evoka-text: #111827;
-      --evoka-text-muted: #6b7280;
-      --evoka-hover: rgba(0, 0, 0, 0.04);
-    }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--evoka-bg);
+  color: var(--evoka-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
 
-    body {
-      background-color: var(--evoka-bg);
-      color: var(--evoka-text);
-      transition: background-color 0.2s ease, color 0.2s ease;
-    }
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
 
-    .evoka-surface { background-color: var(--evoka-surface); }
-    .evoka-border { border: 1px solid var(--evoka-border); }
-    .evoka-text { color: var(--evoka-text); }
-    .evoka-text-muted { color: var(--evoka-text-muted); }
-    .evoka-hover:hover { background-color: var(--evoka-hover); }
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
 
-    #side-nav a.bg-gray-700 {
-      background-color: rgba(59, 130, 246, 0.1);
-      color: #3b82f6;
-    }
+.sidebar-overlay.active {
+  display: block;
+}
 
-    * { scrollbar-color: var(--evoka-border) transparent; }
-  </style>
-</head>
+.sidebar {
+  width: 260px;
+  background-color: var(--evoka-surface);
+  border-right: 1px solid var(--evoka-border);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
 
-<body class="min-h-screen">
-  <div class="flex min-h-screen">
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid var(--evoka-border);
+}
 
-    <!-- SIDEBAR -->
-    <aside class="w-64 evoka-surface border-r evoka-border flex flex-col">
-      <div class="p-4 border-b evoka-border">
-        <div class="text-lg font-bold evoka-text">EVOKA</div>
-        <div class="text-xs evoka-text-muted">MVP1</div>
-      </div>
+.sidebar-logo {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
 
-      <nav id="side-nav" class="p-3 flex-1 space-y-1">
-        <a href="#" data-page="home" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Home</a>
-        <a href="#" data-page="memories" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Memorias</a>
-        <a href="#" data-page="dialogue" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Diálogo</a>
-        <a href="#" data-page="executors" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Ejecutores</a>
-        <a href="#" data-page="discover" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Descubrir</a>
-        <a href="#" data-page="claims" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Reclamos</a>
-        <a href="#" data-page="plans" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Planes</a>
-        <a href="#" data-page="settings" class="block px-3 py-2 rounded text-sm evoka-text-muted evoka-hover transition">Configuración</a>
-      </nav>
+.brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--evoka-text);
+  background: linear-gradient(135deg, var(--amber-500), var(--amber-700));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
-      <div class="p-3 border-t evoka-border text-xs evoka-text-muted">
-        © EVOKA
-      </div>
-    </aside>
+.brand-tag {
+  font-size: 10px;
+  color: var(--evoka-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
 
-    <!-- MAIN -->
-    <main class="flex-1 flex flex-col">
+.sidebar-nav {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+}
 
-      <!-- TOP BAR -->
-      <header class="h-14 flex items-center justify-between px-4 border-b evoka-border evoka-surface">
-        <div class="text-sm evoka-text-muted">
-          Evoka MVP — recuerdos, cápsulas, legado.
-        </div>
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 4px;
+  border-radius: 8px;
+  color: var(--evoka-text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
 
-        <div class="relative">
-          <button id="profile-button" onclick="window.app.toggleProfileMenu()"
-                  class="px-3 py-2 rounded evoka-border text-sm evoka-text-muted evoka-hover">
-            Perfil ▾
-          </button>
+.nav-item:hover {
+  background-color: var(--evoka-hover);
+  color: var(--evoka-text);
+}
 
-          <div id="profile-menu"
-               class="hidden absolute right-0 mt-2 w-44 evoka-surface evoka-border rounded-lg shadow-lg overflow-hidden z-50">
-            <a href="#" onclick="event.preventDefault(); window.app.navigateTo('settings')" class="block px-4 py-2 text-sm evoka-text-muted evoka-hover">Configuración</a>
-            <a href="#" onclick="event.preventDefault(); window.app.navigateTo('memories')" class="block px-4 py-2 text-sm evoka-text-muted evoka-hover">Memorias</a>
-            <div class="border-t evoka-border"></div>
-            <button onclick="window.app.setTheme(window.app.theme === 'dark' ? 'light' : 'dark')"
-                    class="w-full text-left px-4 py-2 text-sm evoka-text-muted evoka-hover">
-              Cambiar tema
-            </button>
-          </div>
-        </div>
-      </header>
+.nav-item.bg-gray-700 {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+  color: var(--amber-500);
+  font-weight: 500;
+}
 
-      <!-- CONTENT -->
-      <div id="main-content" class="flex-1"></div>
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
 
-      <!-- ACTION BAR -->
-      <div class="p-4">
-        <div id="action-bar"></div>
-      </div>
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid var(--evoka-border);
+  text-align: center;
+}
 
-    </main>
-  </div>
+.footer-text {
+  font-size: 11px;
+  color: var(--evoka-text-muted);
+}
 
-  <script src="./app.js"></script>
-</body>
-</html>
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.top-bar {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background-color: var(--evoka-surface);
+  border-bottom: 1px solid var(--evoka-border);
+  gap: 16px;
+}
+
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--evoka-border);
+  background: transparent;
+  color: var(--evoka-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+  background-color: var(--evoka-hover);
+  color: var(--evoka-text);
+  border-color: var(--amber-500);
+}
+
+.top-bar-title {
+  flex: 1;
+  font-size: 13px;
+  color: var(--evoka-text-muted);
+}
+
+.profile-menu-container {
+  position: relative;
+}
+
+.profile-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--evoka-border);
+  background: transparent;
+  color: var(--evoka-text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-button:hover {
+  background-color: var(--evoka-hover);
+  color: var(--evoka-text);
+}
+
+.profile-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 180px;
+  background-color: var(--evoka-surface);
+  border: 1px solid var(--evoka-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.profile-menu.hidden {
+  display: none;
+}
+
+.profile-menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--evoka-text-muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-menu-item:hover {
+  background-color: var(--evoka-hover);
+  color: var(--evoka-text);
+}
+
+.profile-menu-divider {
+  height: 1px;
+  background-color: var(--evoka-border);
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.action-bar-container {
+  padding: 20px;
+}
+
+.evoka-surface {
+  background-color: var(--evoka-surface);
+}
+
+.evoka-border {
+  border: 1px solid var(--evoka-border);
+}
+
+.evoka-text {
+  color: var(--evoka-text);
+}
+
+.evoka-text-muted {
+  color: var(--evoka-text-muted);
+}
+
+.evoka-hover:hover {
+  background-color: var(--evoka-hover);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .top-bar-title {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+
+  .main-content {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+  }
+
+  .app-container:has(.sidebar:not(.collapsed)) .main-content {
+    margin-left: 260px;
+  }
+}
