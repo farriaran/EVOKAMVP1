@@ -1,125 +1,100 @@
 <!doctype html>
-<html lang="es" data-theme="dark">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EVOKA MVP1</title>
-  <link rel="stylesheet" href="./styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EVOKA - MVP</title>
+
+  <!-- Tailwind CDN (allowed) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Optional font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Project styles -->
+  <link rel="stylesheet" href="styles.css">
 </head>
+<body class="font-inter bg-gray-50 text-gray-900">
 
-<body>
-  <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar" aria-label="Navegación">
-      <div class="sidebar-top">
-        <div class="brand">
-          <div class="brand-dot"></div>
-          <div class="brand-text">EVOKA</div>
-        </div>
-
-        <nav class="nav">
-          <button class="nav-btn active" data-route="home" aria-label="Inicio">
-            <!-- Home icon -->
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3 2.5 11.2a1 1 0 0 0 .7 1.8H5v8a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-8h1.8a1 1 0 0 0 .7-1.8L12 3z"/>
-            </svg>
-          </button>
-
-          <button class="nav-btn" data-route="chat" aria-label="Diálogo">
-            <!-- Chat bubble -->
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-4.2 3.1A1 1 0 0 1 3 19.3V6a2 2 0 0 1 1-2z"/>
-            </svg>
-          </button>
-
-          <button class="nav-btn" data-route="calendar" aria-label="Calendario">
-            <!-- Calendar -->
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7 2a1 1 0 0 1 1 1v1h8V3a1 1 0 1 1 2 0v1h1a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h1V3a1 1 0 0 1 1-1zm13 9H4v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9z"/>
-            </svg>
-          </button>
-
-          <button class="nav-btn" data-route="vault" aria-label="Privado">
-            <!-- Lock -->
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V8a3 3 0 0 0-6 0v2z"/>
-            </svg>
-          </button>
-
-          <button class="nav-btn" data-route="settings" aria-label="Settings">
-            <!-- Sliders -->
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 7h10a2 2 0 1 0 0-2H4a1 1 0 1 0 0 2zm0 12h6a2 2 0 1 0 0-2H4a1 1 0 1 0 0 2zm0-6h14a2 2 0 1 0 0-2H4a1 1 0 1 0 0 2z"/>
-            </svg>
-          </button>
-        </nav>
-      </div>
-
-      <div class="sidebar-bottom">
-        <div class="sidebar-spacer"></div>
-      </div>
+  <div class="app-root flex h-screen">
+    <!-- Navigation rail (collapsible by hover) -->
+    <aside id="nav-rail" class="nav-rail bg-white border-r">
+      <nav id="side-nav" class="side-nav">
+        <ul class="menu">
+          <li><a href="#" data-target="home" class="nav-link block px-4 py-3">Inicio</a></li>
+          <li><a href="#" data-target="capsules" class="nav-link block px-4 py-3">Capsulas</a></li>
+          <li><a href="#" data-target="settings" class="nav-link block px-4 py-3">Ajustes</a></li>
+        </ul>
+      </nav>
     </aside>
 
-    <!-- Main -->
-    <main class="main">
-      <!-- Top-right user widget -->
-      <div class="user-widget" aria-label="Usuario">
-        <div class="avatar">F</div>
-        <div class="plan">
-          <div class="plan-name">FREE</div>
-          <div class="plan-meta">
-            <span class="meta-dot"></span>
-            <span id="capsuleCount">0</span>
+    <!-- Main content -->
+    <main id="main-content" class="flex-1 flex flex-col">
+      <!-- Header -->
+      <header class="header flex items-center justify-between px-6 py-3 bg-white border-b">
+        <div class="left flex items-center space-x-4">
+          <button id="profile-button" class="profile-button px-3 py-2 rounded hover:bg-gray-100">
+            Felipe
+          </button>
+
+          <div id="profile-menu" class="profile-menu hidden absolute mt-12 bg-white border rounded shadow-sm w-48 right-6">
+            <ul>
+              <li class="px-4 py-2 text-sm">Ver perfil</li>
+              <li class="px-4 py-2 text-sm">Cerrar sesión</li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      <!-- Center hero -->
-      <section class="hero" id="view">
-        <h1 class="hero-title">Hola Felipe</h1>
-        <p class="hero-subtitle">¿Qué recuerdo quieres evocar hoy?</p>
+        <div class="right flex items-center space-x-6">
+          <div id="user-status" class="text-sm text-gray-600">En línea</div>
+          <div id="token-count" class="text-sm text-gray-700">Tokens: 0</div>
+        </div>
+      </header>
+
+      <!-- Views container -->
+      <section id="views" class="flex-1 overflow-auto p-6">
+        <!-- Home view -->
+        <div id="home" class="view">
+          <h1 class="text-2xl font-semibold mb-4">Hola Felipe</h1>
+
+          <div class="content bg-white border rounded p-4">
+            <p class="text-sm text-gray-700 mb-4">Bienvenido al panel de EVOKA.</p>
+
+            <!-- Action bar -->
+            <div id="action-bar" class="action-bar border rounded p-4 bg-gray-50">
+              <label for="capsule-input" class="sr-only">Escribir cápsula</label>
+              <textarea id="capsule-input" rows="4" class="w-full p-2 border rounded resize-none" placeholder="Escribe tu cápsula aquí..."></textarea>
+
+              <div class="mt-3 flex items-center space-x-3">
+                <button id="save-button" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+                <button id="executor-button" class="px-4 py-2 bg-gray-200 rounded">Seleccionar ejecutor</button>
+                <button id="record-button" class="px-3 py-2 bg-gray-200 rounded">Grabar</button>
+                <div id="confirmation-message" class="text-sm text-green-700 ml-3 hidden">Guardado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capsules view (placeholder) -->
+        <div id="capsules" class="view hidden">
+          <h2 class="text-xl font-semibold mb-4">Cápsulas</h2>
+          <div id="capsules-list" class="space-y-2">
+            <!-- loaded dynamically -->
+          </div>
+        </div>
+
+        <!-- Settings view (placeholder) -->
+        <div id="settings" class="view hidden">
+          <h2 class="text-xl font-semibold mb-4">Ajustes</h2>
+          <p class="text-sm text-gray-700">Configuraciones de la aplicación.</p>
+        </div>
       </section>
-
-      <!-- Bottom composer -->
-      <footer class="composer">
-        <div class="composer-card">
-          <div class="composer-head">
-            <div class="composer-left">
-              <span class="lock">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M7 10V8a5 5 0 0 1 10 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V8a3 3 0 0 0-6 0v2z"/>
-                </svg>
-                Privada
-              </span>
-            </div>
-            <div class="composer-right">MVP</div>
-          </div>
-
-          <div class="composer-body">
-            <textarea id="prompt" class="prompt" rows="1" placeholder="Vuelve mañana para más cápsulas."></textarea>
-
-            <div class="composer-actions">
-              <button id="micBtn" class="icon-btn" type="button" aria-label="Micrófono">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm7-3a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V20H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-2.08A7 7 0 0 0 19 11z"/>
-                </svg>
-              </button>
-
-              <button id="sendBtn" class="send-btn" type="button" aria-label="Enviar">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 3a1 1 0 0 1 1 1v12.6l3.3-3.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.4L11 16.6V4a1 1 0 0 1 1-1z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </footer>
     </main>
   </div>
 
-  <script src="./app.js"></script>
+  <!-- App script -->
+  <script src="app.js"></script>
 </body>
 </html>
-
 
 
