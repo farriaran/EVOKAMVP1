@@ -1,99 +1,86 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>EVOKA - MVP</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVOKA - Tu Legado Digital</title>
 
-  <!-- Tailwind CDN (allowed) -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CDN (allowed) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Optional font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Project styles -->
-  <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="font-inter bg-gray-50 text-gray-900">
+<body class="bg-[#131314] text-gray-200 antialiased flex">
 
-  <div class="app-root flex h-screen">
-    <!-- Navigation rail (collapsible by hover) -->
-    <aside id="nav-rail" class="nav-rail bg-white border-r">
-      <nav id="side-nav" class="side-nav">
-        <ul class="menu">
-          <li><a href="#" data-target="home" class="nav-link block px-4 py-3">Inicio</a></li>
-          <li><a href="#" data-target="capsules" class="nav-link block px-4 py-3">Capsulas</a></li>
-          <li><a href="#" data-target="settings" class="nav-link block px-4 py-3">Ajustes</a></li>
-        </ul>
-      </nav>
+    <!-- Barra de Navegación Lateral (Navigation Rail) -->
+    <aside id="nav-rail" class="bg-[#1e1f20] h-screen p-4 flex flex-col items-center space-y-6 w-20 hover:w-64 transition-all duration-300 ease-in-out group">
+        <div class="w-16 mb-4">
+            <svg viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="gradIso1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#22d3ee;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <text x="50%" y="50%" dy=".3em" text-anchor="middle" font-family="Nunito, sans-serif" font-size="50" font-weight="800" fill="url(#gradIso1)" letter-spacing="-2">
+                EV<tspan fill="#67e8f9">O</tspan>KA
+              </text>
+              <path d="M 68 40 L 182 40" stroke="url(#gradIso1)" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <nav id="side-nav" class="flex flex-col space-y-2 w-full" aria-label="Navegación lateral">
+            <!-- Los enlaces de navegación se insertarán aquí -->
+        </nav>
     </aside>
 
-    <!-- Main content -->
-    <main id="main-content" class="flex-1 flex flex-col">
-      <!-- Header -->
-      <header class="header flex items-center justify-between px-6 py-3 bg-white border-b">
-        <div class="left flex items-center space-x-4">
-          <button id="profile-button" class="profile-button px-3 py-2 rounded hover:bg-gray-100">
-            Felipe
-          </button>
-
-          <div id="profile-menu" class="profile-menu hidden absolute mt-12 bg-white border rounded shadow-sm w-48 right-6">
-            <ul>
-              <li class="px-4 py-2 text-sm">Ver perfil</li>
-              <li class="px-4 py-2 text-sm">Cerrar sesión</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="right flex items-center space-x-6">
-          <div id="user-status" class="text-sm text-gray-600">En línea</div>
-          <div id="token-count" class="text-sm text-gray-700">Tokens: 0</div>
-        </div>
-      </header>
-
-      <!-- Views container -->
-      <section id="views" class="flex-1 overflow-auto p-6">
-        <!-- Home view -->
-        <div id="home" class="view">
-          <h1 class="text-2xl font-semibold mb-4">Hola Felipe</h1>
-
-          <div class="content bg-white border rounded p-4">
-            <p class="text-sm text-gray-700 mb-4">Bienvenido al panel de EVOKA.</p>
-
-            <!-- Action bar -->
-            <div id="action-bar" class="action-bar border rounded p-4 bg-gray-50">
-              <label for="capsule-input" class="sr-only">Escribir cápsula</label>
-              <textarea id="capsule-input" rows="4" class="w-full p-2 border rounded resize-none" placeholder="Escribe tu cápsula aquí..."></textarea>
-
-              <div class="mt-3 flex items-center space-x-3">
-                <button id="save-button" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
-                <button id="executor-button" class="px-4 py-2 bg-gray-200 rounded">Seleccionar ejecutor</button>
-                <button id="record-button" class="px-3 py-2 bg-gray-200 rounded">Grabar</button>
-                <div id="confirmation-message" class="text-sm text-green-700 ml-3 hidden">Guardado</div>
-              </div>
+    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
+    <div class="flex-1 flex flex-col h-screen">
+        <!-- Cabecera -->
+        <header class="flex justify-end items-center py-4 px-6">
+            <div class="relative">
+                <button id="profile-button" onclick="window.app.toggleProfileMenu()" class="flex items-center space-x-2 bg-gray-800/50 p-1 pr-3 rounded-full transition hover:bg-gray-700" aria-haspopup="true" aria-expanded="false">
+                    <div class="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center font-bold text-cyan-300 border-2 border-cyan-500">
+                        F
+                    </div>
+                    <div class="flex flex-col items-start -space-y-1">
+                        <span id="user-status" class="text-xs font-bold text-cyan-400">FREE</span>
+                        <div class="flex items-center gap-1 text-xs text-gray-300">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2_17.477 9.41a1 1 0 01.293 1.744l-2.653 1.72_1.433 3.428a1 1 0 01-1.617 1.057L12 15.583l-2.933 2.764a1 1 0 01-1.617-1.057l1.433-3.428L6.23 11.154a1 1 0 01.293-1.744L9.854 7.2 11.033 2.744A1 1 0 0112 2z" clip-rule="evenodd"></path></svg>
+                            <span id="token-count">1</span>
+                        </div>
+                    </div>
+                </button>
+                <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right bg-[#2c2d2f] rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                    <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <a href="#" onclick="window.app.navigateTo('profile')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" role="menuitem">Perfil</a>
+                        <a href="#" onclick="window.app.navigateTo('settings')" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700" role="menuitem">Configuración</a>
+                         <div class="border-t border-gray-700 my-1"></div>
+                        <a href="#" onclick="window.app.navigateTo('plans')" class="block px-4 py-2 text-sm font-semibold text-cyan-400 hover:bg-gray-700" role="menuitem">Mejora tu experiencia</a>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
+        </header>
 
-        <!-- Capsules view (placeholder) -->
-        <div id="capsules" class="view hidden">
-          <h2 class="text-xl font-semibold mb-4">Cápsulas</h2>
-          <div id="capsules-list" class="space-y-2">
-            <!-- loaded dynamically -->
-          </div>
-        </div>
+        <!-- Contenido Principal -->
+        <main id="main-content" class="flex-grow flex flex-col px-6 pb-24 overflow-y-auto">
+            <!-- La vista se cargará aquí -->
+        </main>
 
-        <!-- Settings view (placeholder) -->
-        <div id="settings" class="view hidden">
-          <h2 class="text-xl font-semibold mb-4">Ajustes</h2>
-          <p class="text-sm text-gray-700">Configuraciones de la aplicación.</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- App script -->
-  <script src="app.js"></script>
+        <!-- Barra de Acción Flotante -->
+        <footer id="action-bar" class="fixed bottom-0 left-20 right-0 p-4 max-w-[calc(32rem-5rem)] mx-auto">
+            <!-- El contenido de la barra de acción se cargará aquí -->
+        </footer>
+    </div>
+    
+    <div id="confirmation-message" class="hidden fixed bottom-24 left-1/2 -translate-x-1/2 bg-green-500 text-white py-2 px-6 rounded-full shadow-lg text-center">
+        Tu memoria ha sido publicada en tu legado.
+    </div>
+    
+    <script src="app.js"></script>
 </body>
 </html>
 
