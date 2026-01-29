@@ -1,64 +1,200 @@
-/* styles.css - migrado de EVOKAPP.txt */
+:root{
+  /* EVOKA design tokens (do not change values) */
+  --evoka-bg: #131314;
+  --evoka-surface: #1e1f20;
+  --evoka-border: #2c2d2f;
+  --evoka-text: #e5e7eb;
 
-/* Fuente base */
-body {
-    font-family: 'Nunito', sans-serif;
+  --sidebar-width-expanded: 20rem;
+  --sidebar-width-collapsed: 5.25rem;
+  --sidebar-width: var(--sidebar-width-collapsed);
+
+  --gap: 1rem;
+  --radius: 0.75rem;
 }
 
-/* Animaciones */
-.fade-in { animation: fadeIn 0.5s ease-in-out; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* Base page */
+* { box-sizing: border-box; }
+html,body{ height:100%; margin:0; background:var(--evoka-bg); color:var(--evoka-text); font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
-/* Navigation rail hover behaviour */
-#nav-rail {
-    transition: width 0.3s ease-in-out;
+/* App layout */
+.evoka-app { display:flex; min-height:100vh; }
+
+/* Sidebar - fixed on the left */
+.sidebar {
+  position:fixed;
+  inset:0 auto 0 0; /* top:0; right:auto; bottom:0; left:0; */
+  width:var(--sidebar-width);
+  max-width:var(--sidebar-width-expanded);
+  background:var(--evoka-surface);
+  border-right:1px solid var(--evoka-border);
+  padding:var(--gap);
+  display:flex;
+  flex-direction:column;
+  gap:var(--gap);
+  transition:width 200ms ease;
+  z-index:20;
 }
 
-/* Texto oculto dentro del rail que aparece al hacer hover */
-#nav-rail .nav-text {
-    transition: opacity 0.2s ease-in-out;
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-}
-#nav-rail:hover .nav-text {
-    opacity: 1;
-    width: auto;
-    margin-left: 1rem;
+/* Provide an easy way to expand via class (no JS added here) */
+.sidebar.expanded { --sidebar-width: var(--sidebar-width-expanded); }
+
+/* Top area: brand and collapse button */
+.sidebar-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.5rem;
 }
 
-/* Accordion content helper (if used) */
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease-out;
+/* Clickable text logo */
+.logo {
+  background:transparent;
+  border:none;
+  color:var(--evoka-text);
+  font-weight:800;
+  font-size:1.125rem;
+  letter-spacing:0.05em;
+  cursor:pointer;
+  padding:0;
 }
 
-/* Utility to visually hide while keeping DOM same */
-.hidden { display: none !important; }
-
-/* Keep consistent layout for main areas referenced by JS */
-#nav-rail {
-    min-width: 5rem;
-    max-width: 20rem;
+/* Collapse/expand control (visual only for now) */
+.collapse {
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--evoka-text);
+  padding:0.25rem 0.5rem;
+  border-radius:0.5rem;
+  cursor:pointer;
 }
 
-/* Header padding and z-index adjustments */
-header { z-index: 30; }
+/* Navigation list */
+.sidebar-nav { margin-top:0.5rem; overflow:auto; }
+.nav-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.25rem; }
+.nav-btn {
+  text-align:left;
+  background:transparent;
+  border:none;
+  color:var(--evoka-text);
+  padding:0.6rem 0.75rem;
+  border-radius:0.5rem;
+  cursor:pointer;
+}
+.nav-btn:hover,
+.nav-btn:focus { background: rgba(255,255,255,0.03); outline:none; }
 
-/* Action bar layout */
-#action-bar {
-    z-index: 25;
+/* Main wrapper sits to the right of fixed sidebar */
+.main-wrapper {
+  margin-left: var(--sidebar-width);
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+  transition:margin-left 200ms ease;
 }
 
-/* Confirmation message style */
-#confirmation-message {
-    transition: opacity 0.2s ease;
+/* When the sidebar is expanded via class on body or sidebar, mirror the main margin.
+   (No JS applied by default.) */
+.sidebar.expanded + .main-wrapper { margin-left: var(--sidebar-width-expanded); }
+
+/* Header */
+.main-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:1rem;
+  border-bottom:1px solid rgba(255,255,255,0.02);
+  background:transparent;
 }
 
-/* Explicit no-op selectors to ensure presence (documenting expected IDs) */
-#nav-rail, #side-nav, #main-content, #action-bar, #profile-button, #profile-menu,
-#token-count, #user-status, #save-button, #capsule-input, #confirmation-message {
-    /* placeholder to show these IDs are intentionally present */
+/* Profile and status */
+.profile-area { display:flex; align-items:center; gap:0.5rem; position:relative; }
+.profile-btn {
+  width:2.25rem;
+  height:2.25rem;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.04);
+  background:transparent;
+  color:var(--evoka-text);
 }
+.profile-menu {
+  position:absolute;
+  right:0;
+  top:calc(100% + 0.5rem);
+  background:var(--evoka-surface);
+  border:1px solid var(--evoka-border);
+  padding:0.5rem;
+  border-radius:0.5rem;
+  min-width:12rem;
+}
+
+/* Status area */
+.status-area { display:flex; gap:0.75rem; align-items:center; color:var(--evoka-text); font-size:0.875rem; }
+.user-status { font-weight:700; }
+.token-count { opacity:0.9; }
+
+/* Main content area */
+.content {
+  padding:1.25rem;
+  flex:1 1 auto;
+  background:transparent;
+}
+
+/* Placeholder */
+.placeholder {
+  border:1px dashed rgba(255,255,255,0.04);
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  padding:2rem;
+  border-radius:var(--radius);
+  color:var(--evoka-text);
+}
+
+/* Action bar (kept for compatibility) */
+.action-bar {
+  border-top:1px solid rgba(255,255,255,0.02);
+  padding:0.75rem;
+  background:transparent;
+  display:flex;
+  gap:0.75rem;
+  align-items:center;
+}
+
+/* Capsule input and save button kept (IDs must exist) */
+.capsule-input {
+  flex:1 1 auto;
+  min-height:44px;
+  background:transparent;
+  color:var(--evoka-text);
+  border:1px solid var(--evoka-border);
+  padding:0.5rem;
+  border-radius:0.5rem;
+  resize:none;
+}
+.save-button {
+  background:var(--evoka-surface);
+  color:var(--evoka-text);
+  border:1px solid var(--evoka-border);
+  padding:0.5rem 0.75rem;
+  border-radius:0.5rem;
+  cursor:pointer;
+}
+
+/* Confirmation message */
+.confirmation-message {
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  bottom:4.5rem;
+  background:#10b981; /* keep original accent for visibility */
+  color:white;
+  padding:0.5rem 1rem;
+  border-radius:999px;
+  box-shadow:0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* Utility hidden class */
+.hidden { display:none !important; }
+
+/* Accessibility: focus visible */
+:focus { outline: 2px solid rgba(99,102,241,0.12); outline-offset: 2px; }
