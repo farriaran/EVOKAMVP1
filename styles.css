@@ -7,7 +7,6 @@
 
   --sidebar-width-expanded: 20rem;
   --sidebar-width-collapsed: 5.25rem;
-  --sidebar-width: var(--sidebar-width-collapsed);
 
   --gap: 1rem;
   --radius: 0.75rem;
@@ -24,7 +23,7 @@ html,body{ height:100%; margin:0; background:var(--evoka-bg); color:var(--evoka-
 .sidebar {
   position:fixed;
   inset:0 auto 0 0; /* top:0; right:auto; bottom:0; left:0; */
-  width:var(--sidebar-width);
+  width:var(--sidebar-width-collapsed); /* fallback initial value - will be overridden below */
   max-width:var(--sidebar-width-expanded);
   background:var(--evoka-surface);
   border-right:1px solid var(--evoka-border);
@@ -32,12 +31,9 @@ html,body{ height:100%; margin:0; background:var(--evoka-bg); color:var(--evoka-
   display:flex;
   flex-direction:column;
   gap:var(--gap);
-  transition:width 200ms ease;
+  transition: width 220ms cubic-bezier(.2,.9,.2,1);
   z-index:20;
 }
-
-/* Provide an easy way to expand via class (no JS added here) */
-.sidebar.expanded { --sidebar-width: var(--sidebar-width-expanded); }
 
 /* Top area: brand and collapse button */
 .sidebar-top {
@@ -86,17 +82,13 @@ html,body{ height:100%; margin:0; background:var(--evoka-bg); color:var(--evoka-
 
 /* Main wrapper sits to the right of fixed sidebar */
 .main-wrapper {
-  margin-left: var(--sidebar-width);
+  margin-left: var(--sidebar-width-collapsed);
   flex:1 1 auto;
   display:flex;
   flex-direction:column;
   min-height:100vh;
-  transition:margin-left 200ms ease;
+  transition: margin-left 220ms cubic-bezier(.2,.9,.2,1);
 }
-
-/* When the sidebar is expanded via class on body or sidebar, mirror the main margin.
-   (No JS applied by default.) */
-.sidebar.expanded + .main-wrapper { margin-left: var(--sidebar-width-expanded); }
 
 /* Header */
 .main-header {
@@ -198,3 +190,33 @@ html,body{ height:100%; margin:0; background:var(--evoka-bg); color:var(--evoka-
 
 /* Accessibility: focus visible */
 :focus { outline: 2px solid rgba(99,102,241,0.12); outline-offset: 2px; }
+
+/* --------------------------------------------------------------
+   Collapsible Sidebar behavior (use .is-collapsed on the sidebar)
+   - Do NOT redefine CSS variables
+   - Width transition provides smooth collapse
+   - Expanded: ~260px, Collapsed: ~72px
+   - Main content adjusts via sibling selector
+   -------------------------------------------------------------- */
+
+/* Explicit expanded/collapsed widths (px values as requested) */
+.sidebar { width: 260px; } /* expanded by default */
+.sidebar.is-collapsed { width: 72px; }
+
+/* Mirror main-wrapper margin to match sidebar width */
+.main-wrapper { margin-left: 260px; }
+.sidebar.is-collapsed + .main-wrapper { margin-left: 72px; }
+
+/* Ensure transitions are smooth and consistent */
+.sidebar,
+.main-wrapper {
+  transition-property: width, margin-left;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(.2,.9,.2,1);
+}
+
+/* Improve overflow handling when collapsed */
+.sidebar.is-collapsed .nav-list {
+  /* keep items accessible but visually compact */
+  gap: 0.125rem;
+}
